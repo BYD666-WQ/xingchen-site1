@@ -6,12 +6,12 @@
 </div></div><nav class="bottom-nav"><a href="index.html"><b>⌂</b>首页</a><a class="on" href="data.html"><b>▤</b>资料大全</a><a href="trends.html"><b>⌁</b>规律走势</a><a href="gallery.html"><b>▣</b>图库</a></nav><script src="assets/app.js"></script><script>
 XC.load().then(function(D){
   var msg=document.getElementById('msg');msg.style.display='none';
-  var pick=(D.pick&&D.pick.rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});
+  var pick=(D.pick&&D.pick.rows||[]).slice().sort(function(a,b){return (parseInt(a.issue,10)||0)-(parseInt(b.issue,10)||0)}).slice(-4);
   document.getElementById('pickBody').className='';
   document.getElementById('pickBody').innerHTML=pick.slice(0,4).map(function(p){
-    var q=p.pick||{};return '<div class="hot-item"><b>'+p.issue+'期 精选一肖一码：'+ (q.zodiac||'')+'-'+(q.num||'')+'</b><small>七肖：'+(p.seven.zodiac||[]).join(' ')+' · ⑦码：'+(p.seven.nums||[]).join(' ')+'</small><small>五肖：'+(p.five.zodiac||[]).join(' ')+' · 三肖：'+(p.three.zodiac||[]).join(' ')+'</small></div>'
+    var q=p.pick||{};return '<div class="hot-item"><b>'+p.issue+'期 精选一肖一码：'+ (q.zodiac||'')+'-'+(q.num||'')+'</b><small>七肖：'+(p.seven.zodiac||[]).join(' ')+' · ⑦码：'+p.seven.nums.slice(0,6).join(' ')+' + '+p.seven.nums[6]+'</small><small>五肖：'+(p.five.zodiac||[]).join(' ')+' · 三肖：'+(p.three.zodiac||[]).join(' ')+'</small></div>'
   }).join('')||'<div class="empty">暂无精选资料</div>';
-  var z=(D.ziliao&&D.ziliao.rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});
+  var z=(D.ziliao&&D.ziliao.rows||[]).slice().sort(function(a,b){return (parseInt(a.issue,10)||0)-(parseInt(b.issue,10)||0)});
   document.getElementById('zBody').className='';
   document.getElementById('zBody').innerHTML='<table class="tbl"><thead><tr><th>期号</th><th>单双</th><th>三肖</th><th>结果</th><th>状态</th></tr></thead><tbody>'+z.slice(0,20).map(function(r){var res=r.result||{};return '<tr><td>'+r.issue+'</td><td>'+(r.oddEven||'-')+'</td><td>'+((r.threeZodiac||[]).join('')||'-')+'</td><td>'+((res.z||'')+(res.c||'')||'?')+'</td><td><span class="tag">'+(r.status==='live'?'已开':'待开')+'</span></td></tr>'}).join('')+'</tbody></table>';
 }).catch(function(e){document.getElementById('msg').textContent='数据读取失败，请刷新';document.getElementById('msg').className='loading err';console.error(e)});

@@ -59,7 +59,9 @@
   function renderBalls(v){
     document.getElementById('issueTop').textContent=XC.fmtIssue(v.issue||v.currentIssue);
     var nums=v.nums||[];
-    document.getElementById('numRow').innerHTML=nums.slice(0,7).map(function(x,i){var cls=XC.numClass(x.c);return '<div class="nc '+cls+(i===6?' gold':'')+'"><b>'+esc(x.c)+'</b><i>'+esc(x.z)+'</i></div>'}).join('');
+    var head=nums.slice(0,6).map(function(x){return '<div class="nc '+XC.numClass(x.c)+'"><b>'+esc(x.c)+'</b><i>'+esc(x.z)+'</i></div>'}).join('');
+    var sp=nums[6]?('<span class="plus-sep">+</span><div class="nc '+XC.numClass(nums[6].c)+'"><b>'+esc(nums[6].c)+'</b><i>'+esc(nums[6].z)+'</i></div>'):'';
+    document.getElementById('numRow').innerHTML=head+sp;
   }
   function tick(){
     if(!DATA)return;var v=view(CUR);if(!v)return;
@@ -74,7 +76,7 @@
     document.getElementById('boards').innerHTML=BOARDS.map(function(b,i){return '<a class="g3" href="'+(i===0?'data.html#pick':(i===1?'#histWrap':(i===2?'#poemWrap':(i===3?'#zodWrap':(i===4?'data.html':(i===5?'gallery.html':(i===6?'trends.html':'#')))))))+'">'+(i+1)+'、'+b[0]+'<small>'+b[1]+'</small></a>'}).join('');
   }
   function renderHistory(v){
-    var hist=(v.history||[]).slice(0,4);document.getElementById('histHead').textContent='近期开奖 · '+XC.fmtIssue(v.issue)+' 已更新';
+    var hist=(v.history||[]).slice().sort(function(a,b){return (parseInt(a.issue,10)||0)-(parseInt(b.issue,10)||0)}).slice(-4);document.getElementById('histHead').textContent='近期开奖 · '+XC.fmtIssue(v.issue)+' 已更新';
     document.getElementById('hist').innerHTML=hist.length?hist.map(function(h){var nums=XC.norm(h.nums);var sp=nums[6]||{};var n=nums.slice(0,6).map(function(x){return '<span class="'+XC.numClass(x.c)+'">'+esc(x.c)+'</span>'}).join(' ');return '<div class="hrow">'+XC.histLine(h)+'<span class="sub">本期看点:【<em>生肖 '+esc(sp.z||'')+'</em>】 重点:【<u>冷热对照</u>】</span></div>'}).join(''):'<div class="empty">暂无历史数据</div>';
   }
   function renderHot(){
@@ -101,7 +103,7 @@
     {key:'pingte',title:'平特①肖',type:'pingte'},
     {key:'danshuangsixiao',title:'单双四肖',type:'danshuangsixiao'}
   ];
-  function sortRows(rows){return (rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)})}
+  function sortRows(rows){return (rows||[]).slice().sort(function(a,b){return (parseInt(a.issue,10)||0)-(parseInt(b.issue,10)||0)})}
   function buildSpecialMap(){
     var map={};function add(issue,nums){var a=XC.norm(nums);if(a.length===7)map[XC.short(issue)]=a[6]}
     if(DATA&&DATA.manualRaw){add(DATA.manualRaw.issue,DATA.manualRaw.nums);if(DATA.games.newhk&&DATA.games.newhk.nums)add(DATA.games.newhk.issue,DATA.games.newhk.nums);(DATA.manualRaw.history||[]).forEach(function(x){add(x.issue,x.nums)})}
@@ -119,9 +121,9 @@
   function hitSpan(txt,hit,cls){return '<span class="'+(hit?'hit ':'')+(cls||'')+'">'+esc(txt)+'</span>'}
   function rowWrap(issue,body,extra,sp){return '<div class="board-row"><span class="bi">'+esc(XC.short(issue))+'</span><span class="bd">'+body+(sp?' <span class="sp">开:'+esc(sp.z)+esc(sp.c)+'</span>':'')+'</span><span class="bo">'+extra+'</span></div>'}
   function boardRows(def){
-    if(def.type==='pick')return sortRows(DATA.pick.rows||[]).slice(0,6);
+    if(def.type==='pick')return sortRows(DATA.pick.rows||[]).slice(-6);
     if(!BDL||!BDL[def.key])return [];
-    return sortRows((BDL[def.key]||{}).rows||[]).slice(0,6);
+    return sortRows((BDL[def.key]||{}).rows||[]).slice(-6);
   }
   function renderBoardRow(def,row){
     var sp=spOf(row);

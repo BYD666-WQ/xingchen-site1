@@ -57,6 +57,6 @@
   }
   function fmtIssue(v){return short(v)+'期'}
   function ballHtml(nums,opts){opts=opts||{};var a=(nums||[]).slice(0,7);return a.map(function(x,i){var cls=numClass(x.c);return '<div class="nc '+cls+(i===6?' gold':'')+'"><b>'+x.c+'</b><i>'+(x.z||'')+'</i></div>'}).join('')}
-  function histLine(h){var nums=norm(h.nums),n=nums.map(function(x){return x.c}),sp=nums[6]||{};return '<span class="iss">'+short(h.issue)+'期:</span> <span class="balltxt">'+n.slice(0,6).join(' ')+'</span> <span class="gold">+ '+sp.c+'</span> <span class="tag">特 '+(sp.z||'')+'</span>'}
+  function histLine(h){var nums=norm(h.nums),n=nums.map(function(x){return x.c}),sp=nums[6]||{};return '<span class="iss">'+short(h.issue)+'期:</span> <span class="balltxt">'+n.slice(0,6).join(' ')+'</span> <span class="plus">+</span> <span class="'+numClass(sp.c)+'">'+sp.c+'</span> <span class="tag">特 '+(sp.z||'')+'</span>'}
   global.XC={load:load,loadBoards:loadBoards,pad:pad,p2:p2,short:short,asNum:asNum,vfDec:vfDec,mdCompat:mdCompat,norm:norm,numClass:numClass,nextAt:nextAt,fmtDate:fmtDate,fmtTime:fmtTime,ballHtml:ballHtml,histLine:histLine,fmtIssue:fmtIssue,drawGame:drawGame};
 })(window);
