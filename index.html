@@ -218,13 +218,21 @@
     out+='<section class="new-block"><div class="new-hd">单双 <span>【】命中区 · 特码波色</span></div>'+dsHtml+'</section>';
     // ③ 一肖一码
     var picks=ascRows((DATA.pick&&DATA.pick.rows)||[]).slice(-6);
+    var curN=parseInt((DATA.games.newhk&&DATA.games.newhk.currentIssue)||0,10);
+    if(curN&&!picks.some(function(p){return String(p.issue)===String(curN+1)}))picks.push({issue:String(curN+1),_pending:true,seven:{zodiac:[],nums:[]},five:{zodiac:[],nums:[]},three:{zodiac:[],nums:[]},pick:{}});
     var pickHtml=picks.map(function(p){
       var sp=spOf(p),dz=drawZod(p.issue),q=p.pick||{};
-      var c7=interCount(p.seven.zodiac,dz),c5=interCount(p.five.zodiac,dz),c3=interCount(p.three.zodiac,dz),mx=Math.max(c7,c5,c3);
-      var exact=!!(sp&&q.zodiac===sp.z&&XC.asNum(q.num)===sp.c);
-      var label=exact?(q.zodiac+'-'+q.num):(sp?(mx?('中'+CN[mx]+'肖'):'未中'):'待开');
+      var label='待开';
+      if(sp){
+        if((p.three.zodiac||[]).indexOf(sp.z)>=0)label='中三肖';
+        else if((p.five.zodiac||[]).indexOf(sp.z)>=0)label='中五肖';
+        else if((p.seven.zodiac||[]).indexOf(sp.z)>=0)label='中七肖';
+        else if(q.zodiac===sp.z&&XC.asNum(q.num)===sp.c)label=q.zodiac+'-'+q.num;
+        else label='未中';
+      }
       function zRow(name,zod,nums,marker){var zs=(zod||[]).map(function(z){return dz.indexOf(z)>=0?'<span class="hit">'+esc(z)+'</span>':esc(z)}).join('');return '<div class="pk-row"><span class="pk-l">'+name+'</span><span class="pk-z">'+zs+'</span><span class="pk-l">'+marker+'</span><span class="pk-n">'+(nums||[]).join(' ')+'</span></div>'}
-      return '<div class="pick-card"><div class="pick-head">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div><div class="pick-wm">资料展示 · 占位水印</div><div class="pick-body">'+zRow('七肖:',p.seven.zodiac,p.seven.nums,'⑦码:')+zRow('五肖:',p.five.zodiac,p.five.nums,'⑤码:')+zRow('三肖:',p.three.zodiac,p.three.nums,'③码:')+'</div></div>';
+      var body=p._pending?'<div class="pk-pending">本期资料待开</div>':(zRow('七肖:',p.seven.zodiac,p.seven.nums,'⑦码:')+zRow('五肖:',p.five.zodiac,p.five.nums,'⑤码:')+zRow('三肖:',p.three.zodiac,p.three.nums,'③码:'));
+      return '<div class="pick-card"><div class="pick-head">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div><div class="pick-wm">资料展示 · 占位水印</div><div class="pick-body">'+body+'</div></div>';
     }).join('')||'<div class="new-empty">暂无精选资料</div>';
     out+='<section class="new-block"><div class="new-hd">一肖一码 <span>精选 · 按实际开奖对照</span></div>'+pickHtml+'</section>';
     el.innerHTML=out;

@@ -344,3 +344,5 @@ body{font-size:15px}
 .pk-z .hit{background:#ffe600;color:#b00000;border-radius:2px;padding:0 2px}
 .new-empty{padding:15px 8px;text-align:center;color:#8a6a33;font-size:13px;font-weight:700;background:#fffaf0;border:1px dashed #e0bd74;margin:4px}
 @media(max-width:360px){.lx-row{grid-template-columns:38px 1fr 72px;font-size:12.5px}.lx-iss{font-size:12.5px}.lx-res{font-size:11px}.ds-row{font-size:12.5px}.ds-res{font-size:11px}.pk-row{grid-template-columns:35px 1fr 33px 1fr;font-size:12.5px}.pick-head{font-size:12.5px}}
+
+.pk-pending{padding:10px 4px;text-align:center;color:#8a6a33;font-size:14px;font-weight:900}
