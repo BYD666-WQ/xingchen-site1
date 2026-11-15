@@ -1,0 +1,232 @@
+
+/* ============================================================
+   仿 49006 体系首页 · 390 预览
+   高饱和彩虹 / 粗黑体 / 描边框 / 黑底霓虹字 / 密集信息
+   占位品牌与内容，不搬运参考站 logo/域名/图片
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff;color:#111}
+body{font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;font-size:12px;line-height:1.25;
+  -webkit-text-size-adjust:100%;padding-bottom:16px;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:430px;margin:0 auto;background:#fff;overflow:hidden}
+
+/* 顶部彩虹 logo ------------------------------------------------ */
+.top-logo{position:relative;display:flex;align-items:center;gap:6px;padding:5px 6px 4px;
+  background:linear-gradient(100deg,#ff2ea6 0%,#ff4d00 18%,#ffe600 34%,#00e676 52%,#00d4ff 70%,#5b4dff 86%,#ff2ea6 100%)}
+.top-logo::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.10)}
+.brand-box{position:relative;z-index:1;display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.18);
+  border:2px solid #fff;border-radius:4px;padding:2px 7px 3px 5px;box-shadow:3px 3px 0 rgba(0,0,0,.28)}
+.brand-box .seal{width:26px;height:30px;background:#d40000;color:#fff;font-weight:900;font-size:13px;
+  display:flex;align-items:center;justify-content:center;line-height:1;border:1px solid #ffe600;
+  writing-mode:vertical-rl;letter-spacing:1px}
+.brand-box .name{font-size:29px;font-weight:900;color:#fff;letter-spacing:-1px;line-height:.95;
+  text-shadow:2px 2px 0 #b00000,-1px -1px 0 #b00000,2px -1px 0 #b00000,-1px 2px 0 #b00000,0 3px 4px rgba(0,0,0,.4)}
+.brand-box .name small{display:block;font-size:10px;letter-spacing:2px;font-weight:700;color:#fff700;
+  text-shadow:1px 1px 0 #b00000;margin-top:1px}
+.right-stamp{margin-left:auto;position:relative;z-index:1;text-align:center;background:#c40000;
+  border:1px solid #ffe600;color:#fff;font-size:10px;font-weight:900;line-height:1.15;padding:3px 5px;
+  box-shadow:2px 2px 0 rgba(0,0,0,.3)}
+.right-stamp b{display:block;font-size:12px;color:#ffe600;letter-spacing:1px}
+
+/* 开奖条 ------------------------------------------------------ */
+.draw-strip{display:flex;align-items:stretch;gap:2px;padding:2px;background:#fff;border-bottom:1px solid #e0e0e0}
+.issue-cell{flex:0 0 44px;background:#ffdd00;border:1px solid #d40000;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;line-height:1.1;padding:1px 0}
+.issue-cell b{font-size:14px;color:#d40000;font-weight:900;letter-spacing:-.5px}
+.issue-cell span{font-size:9px;color:#7a0000;font-weight:700;margin-top:1px}
+.num-row{flex:1 1 auto;display:grid;grid-template-columns:repeat(7,1fr);gap:2px;min-width:0}
+.nc{border:1px solid rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1px 0 0}
+.nc b{font-size:17px;font-weight:900;line-height:1;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.35)}
+.nc i{font-style:normal;font-size:9px;font-weight:700;color:#fff;margin-top:2px;line-height:1}
+.nc.red{background:linear-gradient(#ff3b30,#c50000)}
+.nc.blue{background:linear-gradient(#2f7bff,#003ecb)}
+.nc.green{background:linear-gradient(#18c25c,#007c33)}
+.nc.gold{background:linear-gradient(#ffe45c,#ffb300)}
+.nc.gold b,.nc.gold i{color:#6b2b00;text-shadow:none}
+.refresh-cell{flex:0 0 34px;background:#ffb300;border:1px solid #d40000;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#7a0000;line-height:1.15}
+.refresh-cell em{font-style:normal;font-size:13px;display:block}
+
+/* 彩种条 ------------------------------------------------------ */
+.channels{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#111;padding:2px}
+.ch{display:flex;align-items:center;justify-content:center;gap:4px;height:32px;color:#fff;font-weight:900;
+  font-size:14px;letter-spacing:.5px;text-shadow:0 1px 2px rgba(0,0,0,.5);position:relative}
+.ch .flag{width:15px;height:15px;border-radius:50%;background:#fff;border:2px solid #ffe600;
+  display:flex;align-items:center;justify-content:center;font-size:8px;color:#d40000;font-weight:900}
+.ch.xg{background:linear-gradient(180deg,#18b957,#007a2e)}
+.ch.am{background:linear-gradient(180deg,#ff4b2b,#b30000)}
+.ch.hk{background:linear-gradient(180deg,#2f7bff,#0038b8)}
+.ch.on{box-shadow:inset 0 0 0 2px #ffe600}
+.ch.on::after{content:"";position:absolute;left:10%;right:10%;bottom:1px;height:2px;background:#ffe600}
+
+/* 快捷导航 ---------------------------------------------------- */
+.quick{display:flex;align-items:center;justify-content:space-between;gap:1px;background:#ffd6b0;
+  border-top:1px solid #e9a100;border-bottom:1px solid #e9a100;padding:3px 4px;white-space:nowrap}
+.quick a{font-size:11px;font-weight:900;color:#6b1600;flex:1;text-align:center;letter-spacing:-.3px}
+.quick a:nth-child(2){color:#003ecb}.quick a:nth-child(3){color:#007a2e}
+.quick a:nth-child(4){color:#8a008a}.quick a:nth-child(5){color:#b35c00}
+
+/* 滚动字幕 ---------------------------------------------------- */
+.marquee{background:#000;color:#fff;height:26px;overflow:hidden;position:relative;border-top:1px solid #333;border-bottom:1px solid #333}
+.marquee .track{position:absolute;left:0;top:0;height:26px;display:flex;align-items:center;white-space:nowrap;
+  animation:none;font-weight:900;font-size:14px;letter-spacing:.5px}
+.marquee b{color:#ffe600;padding:0 4px}
+.marquee i{font-style:normal;color:#00e5ff;padding:0 4px}
+.marquee u{text-decoration:none;color:#ff4bd8;padding:0 4px}
+.marquee em{font-style:normal;color:#39ff14;padding:0 4px}
+@keyframes mv{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* 日期条 ------------------------------------------------------ */
+.datebar{display:flex;align-items:center;justify-content:space-between;gap:4px;background:linear-gradient(90deg,#00e676,#adff2f);
+  border-bottom:1px solid #00a33b;padding:3px 6px;font-size:10.5px;font-weight:900;color:#083b00;white-space:nowrap}
+.datebar b{color:#d40000}
+.datebar .zod{color:#8a008a;font-weight:900}
+.datebar .right{color:#003ecb}
+
+/* 倒计时横幅 -------------------------------------------------- */
+.count-banner{position:relative;margin:3px;border:2px solid #d40000;border-radius:4px;overflow:hidden;
+  background:linear-gradient(105deg,#ff2a00,#ff8a00 34%,#ffd000 62%,#ff2ea6 100%)}
+.count-banner::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.16) 0 2px,transparent 2px 12px)}
+.count-inner{position:relative;z-index:1;display:flex;align-items:center;gap:4px;padding:4px 6px;color:#fff}
+.count-inner .label{font-size:10.5px;font-weight:900;line-height:1.2;text-shadow:1px 1px 0 #8a0000;flex:0 0 auto;white-space:nowrap}
+.count-inner .label b{display:block;font-size:13px;color:#fff700;letter-spacing:.5px}
+.count-inner .clock{margin-left:auto;display:flex;align-items:center;gap:2px;font-family:"Arial Black",Arial,sans-serif}
+.count-inner .clock span{background:#000;color:#ffe600;border:1px solid #fff;border-radius:3px;padding:2px 4px;
+  font-size:17px;font-weight:900;line-height:1.05;text-shadow:0 0 4px #ff9900}
+.count-inner .clock i{font-style:normal;color:#fff;font-size:15px;font-weight:900}
+
+/* 3x3 板块 ---------------------------------------------------- */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:3px}
+.g3{border:1px solid #d40000;border-radius:5px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:33px;padding:2px 2px;text-align:center;font-size:12px;font-weight:900;line-height:1.15;
+  letter-spacing:-.4px;color:#d40000;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.g3:nth-child(3n+2){border-color:#003ecb;color:#003ecb}
+.g3:nth-child(3n+1){border-color:#d40000;color:#d40000}
+.g3:nth-child(3n){border-color:#007a2e;color:#007a2e}
+.g3 small{display:block;font-size:9px;font-weight:700;opacity:.75;margin-top:1px}
+
+/* 大横幅 ------------------------------------------------------ */
+.bigline{display:flex;align-items:center;justify-content:center;gap:2px;border-top:2px solid #ffe600;
+  border-bottom:2px solid #ffe600;background:#000;padding:2px 3px;white-space:nowrap;overflow:hidden}
+.bigline .big{font-size:31px;font-weight:900;letter-spacing:-1.5px;line-height:1.05;color:#ffe600;
+  text-shadow:2px 2px 0 #d40000,-1px -1px 0 #7a0000,0 0 10px rgba(255,180,0,.55)}
+.bigline .txt{font-size:13px;font-weight:900;color:#ffe600;text-shadow:1px 1px 0 #d40000}
+.bigline .txt i{font-style:normal;color:#00e5ff}
+.bigline .badge{background:#d40000;color:#fff;font-size:9px;font-weight:900;padding:2px 4px;margin-left:2px;line-height:1.1}
+
+/* 黑底开奖列表 ------------------------------------------------ */
+.hist-head{display:flex;align-items:center;justify-content:center;gap:5px;background:linear-gradient(90deg,#00c6ff,#7b2ff7,#ff2ea6);
+  color:#fff;font-size:13px;font-weight:900;padding:3px;border-top:1px solid #ffe600;border-bottom:1px solid #ffe600}
+.hist{background:#000;padding:2px 3px 3px}
+.hrow{padding:3px 2px;border-bottom:1px dotted #444;color:#fff;font-size:12px;font-weight:700;line-height:1.35;white-space:nowrap}
+.hrow:last-child{border-bottom:0}
+.hrow .iss{color:#ffe600;font-weight:900}
+.hrow .balltxt{font-family:"Arial Black",Arial,sans-serif;font-weight:900;letter-spacing:.4px}
+.hrow .red{color:#ff3b30}.hrow .blue{color:#00b0ff}.hrow .green{color:#39ff14}.hrow .gold{color:#ffe600}
+.hrow .tag{color:#ff4bd8;font-weight:900}
+.hrow .sub{display:block;color:#ffe600;font-size:11px;font-weight:900;margin-top:1px}
+.hrow .sub em{font-style:normal;color:#39ff14}
+.hrow .sub u{text-decoration:none;color:#ff4bd8}
+
+/* 悬浮按钮 ---------------------------------------------------- */
+.fabs{position:fixed;right:5px;bottom:34px;z-index:40;display:flex;flex-direction:column;gap:6px;width:36px}
+.fab{width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff6b6b,#c40000);
+  border:2px solid #ffe600;color:#fff;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 8px rgba(0,0,0,.35);text-shadow:1px 1px 0 #7a0000}
+.fab.top{font-size:12px}
+
+/* 玄机诗象 ---------------------------------------------------- */
+.poem{margin:3px;border:2px solid #ffe600;background:linear-gradient(180deg,#1b0033,#33004d);overflow:hidden}
+.poem-hd{display:flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(90deg,#d40000,#ff2ea6,#7b2ff7);
+  color:#fff;font-size:13px;font-weight:900;padding:3px;letter-spacing:.5px;text-shadow:1px 1px 0 #6a0000}
+.poem-hd b{color:#ffe600}
+.poem p{color:#ffe600;font-size:13px;font-weight:900;line-height:1.85;text-align:center;padding:5px 6px 6px;
+  text-shadow:0 1px 0 #000,0 0 8px rgba(255,230,0,.35);letter-spacing:1px}
+.poem p span{color:#ff4bd8}
+.poem p em{font-style:normal;color:#00e5ff}
+
+/* 生肖表 ------------------------------------------------------ */
+.zod-head{display:flex;align-items:center;justify-content:center;gap:5px;background:#000;color:#ffe600;
+  font-size:12px;font-weight:900;padding:2px;border-top:1px solid #d40000;border-bottom:1px solid #d40000}
+.zod-head b{color:#ff4bd8}
+.zod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:2px;background:#000}
+.zcell{border:1px solid #444;padding:2px 1px 3px;text-align:center;background:#090909}
+.zcell b{display:block;font-size:12px;font-weight:900;line-height:1.1;color:#ffe600;text-shadow:1px 1px 0 #7a0000}
+.zcell span{display:block;font-size:9px;font-weight:700;color:#39ff14;line-height:1.4;word-spacing:1px}
+.zcell:nth-child(3n+2) b{color:#00e5ff}.zcell:nth-child(3n+2) span{color:#ff4bd8}
+.zcell:nth-child(3n) b{color:#ff3b30}.zcell:nth-child(3n) span{color:#ffe600}
+
+/* 热门资料 ---------------------------------------------------- */
+.hot-head{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,#7b2ff7,#ff2ea6);
+  color:#fff;font-size:12px;font-weight:900;padding:3px 6px;border-top:1px solid #ffe600}
+.hot-head span{font-size:9px;color:#ffe600}
+.hotlist{background:#111;padding:2px 3px 3px;border-bottom:1px solid #d40000}
+.hotrow{display:flex;align-items:center;gap:5px;padding:4px 2px;border-bottom:1px dotted #3a3a3a;font-size:11.5px;font-weight:700;white-space:nowrap}
+.hotrow:last-child{border-bottom:0}
+.hotrow .t{color:#fff;overflow:hidden;text-overflow:ellipsis}
+.hotrow .t b{color:#ffe600}
+.hotrow .new{flex:0 0 auto;font-size:8px;font-weight:900;color:#fff;background:#d40000;padding:1px 3px;border-radius:2px}
+.hotrow .hot{flex:0 0 auto;font-size:8px;font-weight:900;color:#6b2b00;background:#ffe600;padding:1px 3px;border-radius:2px}
+.hotrow:nth-child(2) .t b{color:#00e5ff}.hotrow:nth-child(3) .t b{color:#ff4bd8}.hotrow:nth-child(4) .t b{color:#39ff14}
+
+/* 底部条 ------------------------------------------------------ */
+.bottom-tip{background:#111;color:#bbb;font-size:9.5px;text-align:center;padding:5px 4px;line-height:1.5;border-top:2px solid #d40000}
+.bottom-tip b{color:#ffe600}
+
+/* ===== 实站补充：底部导航 / 内容区 / 二级页 ===== */
+body{padding-bottom:58px}
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;background:#080808;border-top:3px solid #d40000;box-shadow:0 -3px 12px rgba(0,0,0,.5)}
+.bottom-nav a{flex:1;text-align:center;color:#aaa;font-size:10px;font-weight:900;padding:5px 0 4px;line-height:1.2;border-right:1px solid #222}
+.bottom-nav a:last-child{border-right:0}
+.bottom-nav a.on{color:#ffe600;background:linear-gradient(180deg,#290000,#080808);text-shadow:0 0 6px rgba(255,230,0,.4)}
+.bottom-nav a b{display:block;font-size:17px;line-height:1;margin-bottom:2px}
+.page-wrap{max-width:430px;margin:0 auto;background:#fff;min-height:100vh}
+.page-top{display:flex;align-items:center;gap:8px;padding:7px 8px;background:linear-gradient(100deg,#ff2ea6,#ff4d00,#ffe600,#00e676,#00d4ff,#5b4dff);color:#fff}
+.page-top a{background:#000;color:#ffe600;border:1px solid #fff;padding:3px 7px;font-size:11px;font-weight:900}
+.page-top h1{font-size:15px;font-weight:900;color:#fff;text-shadow:1px 1px 0 #b00000;margin:0}
+.page-top span{margin-left:auto;font-size:9px;font-weight:900;color:#fff700;background:rgba(0,0,0,.25);padding:2px 5px}
+.page-body{padding:6px}
+.panel{margin-bottom:6px;border:2px solid #d40000;background:#fff}
+.panel-h{background:linear-gradient(90deg,#d40000,#ff2ea6,#7b2ff7);color:#fff;font-size:12px;font-weight:900;padding:4px 7px;text-shadow:1px 1px 0 #6a0000}
+.panel-h span{float:right;font-size:9px;color:#ffe600}
+.tbl{width:100%;border-collapse:collapse;font-size:10px;line-height:1.35}
+.tbl th{background:#111;color:#ffe600;font-size:9px;padding:4px 3px;border:1px solid #333}
+.tbl td{border:1px solid #e2d6bf;padding:4px 3px;text-align:center;background:#fffdf8;color:#222;font-weight:700}
+.tbl tr:nth-child(even) td{background:#fff7e5}
+.tbl .tag{display:inline-block;background:#d40000;color:#fff;padding:1px 3px;font-size:8px}
+.hot-item{padding:7px;border-bottom:1px dotted #d8c6a3;font-size:11px;line-height:1.6}
+.hot-item:last-child{border-bottom:0}
+.hot-item b{color:#d40000}
+.hot-item small{display:block;color:#8a6a33;font-size:9px;margin-top:2px}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px}
+.gcard{height:112px;border:2px solid #d40000;background:linear-gradient(135deg,#111,#2b004d 55%,#d40000);color:#ffe600;padding:7px;display:flex;align-items:flex-end;font-size:10px;font-weight:900;text-shadow:1px 1px 0 #000}
+.gcard:nth-child(2n){border-color:#003ecb;background:linear-gradient(135deg,#001a3d,#003ecb 60%,#00e5ff)}
+.gcard:nth-child(3n){border-color:#007a2e;background:linear-gradient(135deg,#032b10,#00a33b 60%,#adff2f)}
+.bar-row{display:flex;align-items:center;gap:6px;padding:6px 7px;font-size:10px;font-weight:700;border-bottom:1px dotted #e0d0b0}
+.bar-row:last-child{border-bottom:0}
+.bar-row .lab{width:38px;color:#4a2a00}
+.bar-row .track{flex:1;display:block;height:10px;background:#eee;border:1px solid #d9ccb8;box-sizing:border-box}
+.bar-row .fill{display:block;height:100%;min-width:1px;background:linear-gradient(90deg,#d40000,#ff8a00)}
+.bar-row .val{width:32px;text-align:right;color:#d40000}
+.notice{margin:0 0 6px;background:#fff3cd;border:1px solid #e8b33a;color:#8a4a00;font-size:10px;font-weight:700;padding:5px 7px;line-height:1.5}
+.empty{padding:18px 10px;text-align:center;color:#8a6a33;font-size:11px}
+@media(max-width:380px){.brand-box .name{font-size:25px}.nc b{font-size:15px}.count-inner .clock span{font-size:15px}.g3{font-size:11px}.ch{font-size:12px}}
+
+/* ===== 实站补充 ===== */
+.loading{background:#111;color:#ffe600;font-size:10px;text-align:center;padding:3px;font-weight:900}
+.loading.err{background:#8a0000;color:#fff}
+.source-note{font-size:8px;color:#777;text-align:center;padding:2px}
+.g3{position:relative;min-height:38px}
+.g3 .sub{display:block;font-size:8px;font-weight:700;opacity:.78;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hotrow{cursor:pointer}
+.hotrow a{display:flex;align-items:center;gap:5px;color:inherit;width:100%}
+.openbar-link{color:#003ecb;font-weight:900;text-decoration:underline;font-size:10px}
+.hist .hrow .sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist .hrow .sub em{font-style:normal;color:#39ff14}
+.hist .hrow .sub u{text-decoration:none;color:#ff4bd8}
+.pick-line{font-size:11px;font-weight:900;color:#5d2d13;background:#fff7d6;border:1px solid #e8c25d;padding:5px 8px;margin:3px;line-height:1.6}
+.pick-line b{color:#d40000}
+.ziliao-line{font-size:10px;line-height:1.7;color:#4a2a00;background:#fffdf6;border:1px solid #e8d3a4;padding:5px 8px;margin:3px}
+.ziliao-line b{color:#003ecb}

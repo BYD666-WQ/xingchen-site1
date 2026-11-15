@@ -1,0 +1,17 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="color-scheme" content="light only"><title>规律走势 · 新港彩讯</title><link rel="stylesheet" href="assets/style.css"></head><body><div class="page-wrap"><div class="page-top"><a href="index.html">← 首页</a><h1>规律走势</h1><span>TREND / 数据统计</span></div><div class="page-body">
+<div id="msg" class="loading">数据读取中…</div>
+<section class="panel"><div class="panel-h">近期开奖统计 <span>NEW港 · 滚动样本</span></div><div id="bars"></div></section>
+<section class="panel"><div class="panel-h">生肖频次 <span>近期样本</span></div><div id="zrank"></div></section>
+<div class="notice">统计仅取主站公开历史数据做展示，不代表后续走势，不构成投注建议。</div>
+</div></div><nav class="bottom-nav"><a href="index.html"><b>⌂</b>首页</a><a href="data.html"><b>▤</b>资料大全</a><a class="on" href="trends.html"><b>⌁</b>规律走势</a><a href="gallery.html"><b>▣</b>图库</a></nav><script src="assets/app.js"></script><script>
+XC.load().then(function(D){
+ document.getElementById('msg').style.display='none';
+ var v=D.games.newhk;var rows=(v.history||[]).slice(0,20).concat([{issue:v.issue,nums:v.nums}]);
+ var all=[];rows.forEach(function(r){(r.nums||[]).forEach(function(x){if(x&&x.c)all.push(x)})});
+ var red=0,blue=0,green=0,odd=0,even=0,zc={};
+ all.forEach(function(x){var n=parseInt(x.c,10);var c=XC.numClass(x.c);if(c==='red')red++;else if(c==='blue')blue++;else green++;if(n%2)odd++;else even++;if(x.z)zc[x.z]=(zc[x.z]||0)+1});
+ var total=Math.max(1,all.length);function bar(label,val,color){return '<div class="bar-row"><span class="lab">'+label+'</span><span class="track"><span class="fill" style="width:'+Math.round(val/total*100)+'%;background:'+color+'"></span></span><span class="val">'+val+'</span></div>'}
+ document.getElementById('bars').innerHTML=bar('红波',red,'#d40000')+bar('蓝波',blue,'#003ecb')+bar('绿波',green,'#007a2e')+bar('单数',odd,'#ff8a00')+bar('双数',even,'#7b2ff7');
+ var zr=Object.keys(zc).sort(function(a,b){return zc[b]-zc[a]}).slice(0,8);document.getElementById('zrank').innerHTML=zr.length?zr.map(function(z,i){return '<div class="bar-row"><span class="lab">'+z+'</span><span class="track"><span class="fill" style="width:'+Math.round(zc[z]/Math.max(1,zr[0]?zc[zr[0]]:1)*100)+'%"></span></span><span class="val">'+zc[z]+'</span></div>'}).join(''):'<div class="empty">暂无数据</div>';
+}).catch(function(e){document.getElementById('msg').textContent='数据读取失败，请刷新';document.getElementById('msg').className='loading err';console.error(e)});
+</script></body></html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<title>新港彩讯 · 开奖资料站</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="top-logo">
+    <div class="brand-box"><div class="seal">开奖</div><div class="name">新港彩讯<small>开奖资料 · 每日更新</small></div></div>
+    <div class="right-stamp"><b>资料</b>专版</div>
+  </div>
+  <div id="loading" class="loading">数据读取中…</div>
+  <div class="draw-strip">
+    <div class="issue-cell"><b id="issueTop">---期</b><span>开奖</span></div>
+    <div class="num-row" id="numRow"></div>
+    <div class="refresh-cell" id="refreshBtn"><em>↻</em>刷新<br>记录</div>
+  </div>
+  <div class="channels" id="channels">
+    <a class="ch xg on" data-k="newhk" href="#"><span class="flag">港</span>新港</a>
+    <a class="ch am" data-k="newmo" href="#"><span class="flag">澳</span>新澳</a>
+    <a class="ch hk" data-k="hk" href="#"><span class="flag">香</span>香港</a>
+  </div>
+  <div class="quick">
+    <a href="#boards">本期资料</a><a href="#histWrap">历史开奖</a><a href="#poemWrap">玄机诗象</a><a href="#zodWrap">生肖号码</a><a href="data.html">资料大全</a>
+  </div>
+  <div class="marquee"><div class="track"><span id="marqueeText"></span></div></div>
+  <div class="datebar"><span id="todayText">今天</span><span class="zod" id="zodNow">资料更新</span><span class="right">数据仅供参考</span></div>
+  <div class="count-banner"><div class="count-inner"><div class="label"><span id="nextIssueLabel">第319期</span><b>开奖倒计时</b></div><div class="clock"><span id="h">00</span><i>:</i><span id="m">00</span><i>:</i><span id="s">00</span></div></div></div>
+  <div class="grid3" id="boards"></div>
+  <div class="bigline"><span class="big">新港彩讯</span><span class="txt">开奖<i>快</i>人一步</span><span class="badge">资料站</span></div>
+  <div id="histWrap"><div class="hist-head" id="histHead">近期开奖 · 加载中</div><div class="hist" id="hist"></div></div>
+  <div id="poemWrap" class="poem"><div class="poem-hd"><b>玄机诗象</b> · 本期观点</div><p>龙争虎斗，马到成功；<br><span>留意单数生肖</span>，<em>特码看虎马羊</em>。</p></div>
+  <div id="zodWrap"><div class="zod-head">生肖号码对照 · <b>2026 丙午</b> · 点击查看</div><div class="zod-grid" id="zodGrid"></div></div>
+  <div class="hot-head">本期精选 · 数据更新 <span><a href="data.html" style="color:#ffe600">全部 ›</a></span></div>
+  <div class="hotlist" id="hotlist"><div class="hotrow"><span class="t">资料加载中…</span></div></div>
+  <div class="bottom-tip">本站数据来自公开开奖与资料，仅供参考，不构成任何投注建议。<br><b>新港彩讯 · 开奖资料站</b></div>
+</div>
+<nav class="bottom-nav"><a class="on" href="index.html"><b>⌂</b>首页</a><a href="data.html"><b>▤</b>资料大全</a><a href="trends.html"><b>⌁</b>规律走势</a><a href="gallery.html"><b>▣</b>图库</a></nav>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var DATA=null,CUR='newhk',timer=null;
+  var BOARDS=[
+    ['本期资料','内幕/精选'],['历史开奖','往期归档'],['玄机诗象','本期观点'],
+    ['生肖号码','号码对照'],['资料大全','全部资料'],['图库','图集'],
+    ['规律走势','统计图'],['开奖记录','近期'],['使用说明','关于本站']
+  ];
+  var ZODIAC=['鼠','牛','虎','兔','龙','蛇','马','羊','猴','鸡','狗','猪'];
+  var ZN={鼠:'04 16 28 40',牛:'03 15 27 39',虎:'02 14 26 38',兔:'01 13 25 37 49',龙:'12 24 36 48',蛇:'11 23 35 47',马:'10 22 34 46',羊:'09 21 33 45',猴:'08 20 32 44',鸡:'07 19 31 43',狗:'06 18 30 42',猪:'05 17 29 41'};
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function view(k){return DATA&&DATA.games&&DATA.games[k]}
+  function setLoading(txt,err){var e=document.getElementById('loading');if(!e)return;e.textContent=txt;e.className='loading'+(err?' err':'');if(!txt)e.style.display='none'}
+  function renderBalls(v){
+    document.getElementById('issueTop').textContent=XC.fmtIssue(v.issue||v.currentIssue);
+    var nums=v.nums||[];
+    document.getElementById('numRow').innerHTML=nums.slice(0,7).map(function(x,i){var cls=XC.numClass(x.c);return '<div class="nc '+cls+(i===6?' gold':'')+'"><b>'+esc(x.c)+'</b><i>'+esc(x.z)+'</i></div>'}).join('');
+  }
+  function tick(){
+    if(!DATA)return;var v=view(CUR);if(!v)return;
+    var target=v.nextTime?new Date(v.nextTime):null;var s=target?Math.max(0,Math.floor((target-new Date())/1000)):0;
+    var hh=Math.floor(s/3600),mm=Math.floor(s%3600/60),ss=s%60;
+    document.getElementById('h').textContent=XC.p2(hh);document.getElementById('m').textContent=XC.p2(mm);document.getElementById('s').textContent=XC.p2(ss);
+    document.getElementById('nextIssueLabel').textContent='第'+XC.short(v.nextIssue||'')+'期';
+  }
+  function startTick(){if(timer)clearInterval(timer);tick();timer=setInterval(tick,1000)}
+  function setActiveTab(){document.querySelectorAll('#channels .ch').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-k')===CUR)})}
+  function renderBoards(){
+    document.getElementById('boards').innerHTML=BOARDS.map(function(b,i){return '<a class="g3" href="'+(i===0?'data.html#pick':(i===1?'#histWrap':(i===2?'#poemWrap':(i===3?'#zodWrap':(i===4?'data.html':(i===5?'gallery.html':(i===6?'trends.html':'#')))))))+'">'+(i+1)+'、'+b[0]+'<small>'+b[1]+'</small></a>'}).join('');
+  }
+  function renderHistory(v){
+    var hist=(v.history||[]).slice(0,4);document.getElementById('histHead').textContent='近期开奖 · '+XC.fmtIssue(v.issue)+' 已更新';
+    document.getElementById('hist').innerHTML=hist.length?hist.map(function(h){var nums=XC.norm(h.nums);var sp=nums[6]||{};var n=nums.slice(0,6).map(function(x){return '<span class="'+XC.numClass(x.c)+'">'+esc(x.c)+'</span>'}).join(' ');return '<div class="hrow">'+XC.histLine(h)+'<span class="sub">本期看点:【<em>生肖 '+esc(sp.z||'')+'</em>】 重点:【<u>冷热对照</u>】</span></div>'}).join(''):'<div class="empty">暂无历史数据</div>';
+  }
+  function renderHot(){
+    var pick=(DATA.pick&&DATA.pick.rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});
+    var z=(DATA.ziliao&&DATA.ziliao.rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});
+    var out=[];
+    if(pick[0])out.push('<div class="hotrow"><a href="data.html#pick"><span class="t"><b>'+esc(pick[0].issue)+'期:</b> 本期内幕精选 · 精选 '+esc(pick[0].pick&&pick[0].pick.zodiac)+'-'+esc(pick[0].pick&&pick[0].pick.num)+'</span><span class="new">NEW</span></a></div>');
+    if(z[0])out.push('<div class="hotrow"><a href="data.html#ziliao"><span class="t"><b>'+esc(z[0].issue)+'期:</b> 内幕资料 · '+esc(z[0].oddEven||'本期')+' '+esc((z[0].threeZodiac||[]).join(''))+'</span><span class="hot">热</span></a></div>');
+    out.push('<div class="hotrow"><a href="data.html#ziliao"><span class="t"><b>资料库:</b> 玄机诗象与生肖号码表</span></a></div>');
+    out.push('<div class="hotrow"><a href="gallery.html"><span class="t"><b>图库:</b> 开奖海报与主题图集</span></a></div>');
+    document.getElementById('hotlist').innerHTML=out.join('');
+  }
+  function renderAll(){
+    var v=view(CUR);if(!v)return;renderBalls(v);renderHistory(v);setActiveTab();tick();
+    document.getElementById('todayText').textContent='今：'+XC.fmtDate(new Date())+' · 资料更新';
+    document.getElementById('zodNow').textContent='当前：'+v.name+' · '+XC.fmtIssue(v.issue);
+    document.getElementById('marqueeText').innerHTML='新港彩讯 · 开奖数据每日更新 · 资料仅供参考 &nbsp;<b>开奖直播</b> <i>历史归档</i> <u>生肖玄机</u> <em>图库精选</em>';
+  }
+  function switchGame(k){if(!view(k))return;CUR=k;renderAll()}
+  document.getElementById('channels').addEventListener('click',function(e){var a=e.target.closest('[data-k]');if(!a)return;e.preventDefault();switchGame(a.getAttribute('data-k'))});
+  document.getElementById('refreshBtn').addEventListener('click',function(){load()});
+  function load(){setLoading('数据读取中…');XC.load().then(function(d){DATA=d;document.getElementById('loading').style.display='none';renderAll();renderHot();startTick()}).catch(function(e){setLoading('数据读取失败，请稍后刷新',true);console.error(e)})}
+  renderBoards();document.getElementById('zodGrid').innerHTML=ZODIAC.map(function(z){return '<div class="zcell"><b>'+z+'</b><span>'+ZN[z]+'</span></div>'}).join('');load();
+})();
+</script>
+</body>
+</html>
