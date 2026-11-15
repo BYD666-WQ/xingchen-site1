@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="color-scheme" content="light only">
-<title>新港彩讯 · 开奖资料站</title>
+<title>彩霸王 · 开奖资料站</title>
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <div class="wrap" id="app">
   <div class="top-logo">
-    <div class="brand-box"><div class="seal">开奖</div><div class="name">新港彩讯<small>开奖资料 · 每日更新</small></div></div>
+    <div class="brand-box"><div class="seal">开奖</div><div class="name">彩霸王<small>新香港 · 开奖资料</small></div></div>
     <div class="right-stamp"><b>资料</b>专版</div>
   </div>
   <div id="loading" class="loading">数据读取中…</div>
@@ -33,13 +33,13 @@
   <div class="grid3" id="boards"></div>
   <div class="sec-title">九板块数据 <span>近 6 期 · 只标命中</span></div>
   <div id="boardsData"><div class="board-empty">板块数据读取中…</div></div>
-  <div class="bigline"><span class="big">新港彩讯</span><span class="txt">开奖<i>快</i>人一步</span><span class="badge">资料站</span></div>
+  <div class="bigline"><span class="big">彩霸王</span><span class="txt">开奖<i>快</i>人一步</span><span class="badge">资料站</span></div>
   <div id="histWrap"><div class="hist-head" id="histHead">近期开奖 · 加载中</div><div class="hist" id="hist"></div></div>
   <div id="poemWrap" class="poem"><div class="poem-hd"><b>玄机诗象</b> · 本期观点</div><p>龙争虎斗，马到成功；<br><span>留意单数生肖</span>，<em>特码看虎马羊</em>。</p></div>
   <div id="zodWrap"><div class="zod-head">生肖号码对照 · <b>2026 丙午</b> · 点击查看</div><div class="zod-grid" id="zodGrid"></div></div>
   <div class="hot-head">本期精选 · 数据更新 <span><a href="data.html" style="color:#ffe600">全部 ›</a></span></div>
   <div class="hotlist" id="hotlist"><div class="hotrow"><span class="t">资料加载中…</span></div></div>
-  <div class="bottom-tip">本站数据来自公开开奖与资料，仅供参考，不构成任何投注建议。<br><b>新港彩讯 · 开奖资料站</b></div>
+  <div class="bottom-tip">本站数据来自公开开奖与资料，仅供参考，不构成任何投注建议。<br><b>彩霸王 · 开奖资料站</b></div>
 </div>
 <nav class="bottom-nav"><a class="on" href="index.html"><b>⌂</b>首页</a><a href="data.html"><b>▤</b>资料大全</a><a href="trends.html"><b>⌁</b>规律走势</a><a href="gallery.html"><b>▣</b>图库</a></nav>
 <script src="assets/app.js"></script>
@@ -187,7 +187,7 @@
     var v=view(CUR);if(!v)return;renderBalls(v);renderHistory(v);setActiveTab();tick();
     document.getElementById('todayText').textContent='今：'+XC.fmtDate(new Date())+' · 资料更新';
     document.getElementById('zodNow').textContent='当前：'+v.name+' · '+XC.fmtIssue(v.issue);
-    document.getElementById('marqueeText').innerHTML='新港彩讯 · 开奖数据每日更新 · 资料仅供参考 &nbsp;<b>开奖直播</b> <i>历史归档</i> <u>生肖玄机</u> <em>图库精选</em>';
+    document.getElementById('marqueeText').innerHTML='彩霸王 · 开奖数据每日更新 · 资料仅供参考 &nbsp;<b>开奖直播</b> <i>历史归档</i> <u>生肖玄机</u> <em>图库精选</em>';
     renderBoardData();
   }
   function switchGame(k){if(!view(k))return;CUR=k;renderAll();renderBoardData()}
