@@ -309,3 +309,5 @@ body{font-size:15px}
 .draw-strip .num-row .nc{flex:1 1 0;min-width:0}
 .plus-sep{flex:0 0 13px;display:flex;align-items:center;justify-content:center;color:#d40000;font-size:18px;font-weight:900;line-height:1}
 .hrow .plus{color:#fff;font-weight:900;padding:0 2px}
+
+.sp-red{color:#d40000!important}.sp-blue{color:#003ecb!important}.sp-green{color:#007a2e!important}

@@ -119,7 +119,11 @@
   }
   function colorOf(c){if(COLORMAP&&COLORMAP[XC.asNum(c)])return COLORMAP[XC.asNum(c)];var cls=XC.numClass(c);return cls==='red'?'红':(cls==='blue'?'蓝':'绿')}
   function hitSpan(txt,hit,cls){return '<span class="'+(hit?'hit ':'')+(cls||'')+'">'+esc(txt)+'</span>'}
-  function rowWrap(issue,body,extra,sp){return '<div class="board-row"><span class="bi">'+esc(XC.short(issue))+'</span><span class="bd">'+body+(sp?' <span class="sp">开:'+esc(sp.z)+esc(sp.c)+'</span>':'')+'</span><span class="bo">'+extra+'</span></div>'}
+  function rowWrap(issue,body,extra,sp){
+    var sc=sp?(colorOf(sp.color||sp.c)==='红'?'red':(colorOf(sp.color||sp.c)==='蓝'?'blue':'green')):'';
+    var spHtml=sp?(' <span class="sp">开:'+esc(sp.z)+'<span class="sp-'+sc+'">'+esc(sp.c)+'</span></span>'):'';
+    return '<div class="board-row"><span class="bi">'+esc(XC.short(issue))+'</span><span class="bd">'+body+spHtml+'</span><span class="bo">'+extra+'</span></div>';
+  }
   function boardRows(def){
     if(def.type==='pick')return sortRows(DATA.pick.rows||[]).slice(-6);
     if(!BDL||!BDL[def.key])return [];

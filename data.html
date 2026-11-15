@@ -8,8 +8,9 @@ XC.load().then(function(D){
   var msg=document.getElementById('msg');msg.style.display='none';
   var pick=(D.pick&&D.pick.rows||[]).slice().sort(function(a,b){return (parseInt(a.issue,10)||0)-(parseInt(b.issue,10)||0)}).slice(-4);
   document.getElementById('pickBody').className='';
-  document.getElementById('pickBody').innerHTML=pick.slice(0,4).map(function(p){
-    var q=p.pick||{};return '<div class="hot-item"><b>'+p.issue+'期 精选一肖一码：'+ (q.zodiac||'')+'-'+(q.num||'')+'</b><small>七肖：'+(p.seven.zodiac||[]).join(' ')+' · ⑦码：'+p.seven.nums.slice(0,6).join(' ')+' + '+p.seven.nums[6]+'</small><small>五肖：'+(p.five.zodiac||[]).join(' ')+' · 三肖：'+(p.three.zodiac||[]).join(' ')+'</small></div>'
+  document.getElementById('pickBody').innerHTML=pick.map(function(p){
+    var q=p.pick||{},sp=(p.seven.nums||[])[6]||'',cc=XC.numClass(sp)==='red'?'#d40000':(XC.numClass(sp)==='blue'?'#003ecb':'#007a2e');
+    return '<div class="hot-item"><b>'+p.issue+'期 精选一肖一码：'+(q.zodiac||'')+'-'+(q.num||'')+'</b><small>七肖：'+(p.seven.zodiac||[]).join(' ')+' · ⑦码：'+(p.seven.nums||[]).slice(0,6).join(' ')+' + <span style="color:'+cc+'">'+sp+'</span></small><small>五肖：'+(p.five.zodiac||[]).join(' ')+' · 三肖：'+(p.three.zodiac||[]).join(' ')+'</small></div>';
   }).join('')||'<div class="empty">暂无精选资料</div>';
   var z=(D.ziliao&&D.ziliao.rows||[]).slice().sort(function(a,b){return (parseInt(a.issue,10)||0)-(parseInt(b.issue,10)||0)});
   document.getElementById('zBody').className='';
