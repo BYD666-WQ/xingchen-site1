@@ -34,6 +34,7 @@
   <div class="sec-title">九板块数据 <span>近 6 期 · 只标命中</span></div>
   <div id="boardsData"><div class="board-empty">板块数据读取中…</div></div>
   <div id="extraData"><div class="board-empty">新增资料读取中…</div></div>
+  <div id="moreData"><div class="new-empty">更多资料读取中…</div></div>
   <div class="bigline"><span class="big">彩霸王</span><span class="txt">开奖<i>快</i>人一步</span><span class="badge">资料站</span></div>
   <div id="histWrap"><div class="hist-head" id="histHead">近期开奖 · 加载中</div><div class="hist" id="hist"></div></div>
   <div id="poemWrap" class="poem"><div class="poem-hd"><b>玄机诗象</b> · 本期观点</div><p>龙争虎斗，马到成功；<br><span>留意单数生肖</span>，<em>特码看虎马羊</em>。</p></div>
@@ -237,6 +238,43 @@
     out+='<section class="new-block"><div class="new-hd">一肖一码 <span>精选 · 按实际开奖对照</span></div>'+pickHtml+'</section>';
     el.innerHTML=out;
   }
+
+  function renderMoreBlocks(){
+    var el=document.getElementById('moreData');if(!el)return;
+    if(!DATA){el.innerHTML='<div class="new-empty">更多资料读取中…</div>';return}
+    if(CUR!=='newhk'){el.innerHTML='<div class="new-empty">暂无该彩种更多资料（当前已接入新港）</div>';return}
+    if(!BDL){el.innerHTML='<div class="new-empty">更多资料读取中…</div>';return}
+    var out='';
+    // 1 彩霸王内幕五肖五码（真实 wuxiao）
+    var wx=ascRows((BDL.wuxiao||{}).rows||[]).slice(-8);
+    var wxHtml=wx.map(function(r){
+      var sp=spOf(r),hit=false,items=(r.list||[]).map(function(x){var on=!!(sp&&(x.z===sp.z||XC.asNum(x.c)===sp.c));if(on)hit=true;return (on?'<span class="hit">':'' )+esc(x.z)+esc(x.c)+(on?'</span>':'')}).join(' ');
+      return '<div class="more-row"><span class="more-iss">'+esc(XC.short(r.issue))+'期</span><span class="more-mid">'+items+'</span><span class="more-res">'+resultHtml(sp,hit,true)+'</span></div>';
+    }).join('')||'<div class="new-empty">暂无五肖五码资料</div>';
+    out+='<section class="new-block"><div class="new-hd">彩霸王内幕五肖五码 <span>参考站行格式 · 我们数据</span></div>'+wxHtml+'</section>';
+    // 2 高手资料区（真实 liuxiao 作者+六肖）
+    var lx=ascRows((BDL.liuxiao||{}).rows||[]).slice(-8);
+    var lxHtml=lx.map(function(r){
+      var sp=spOf(r),hit=false,items=(r.list||[]).map(function(x){var on=!!(sp&&x.z===sp.z);if(on)hit=true;return (on?'<span class="hit">':'' )+esc(x.z)+esc(x.c)+(on?'</span>':'')}).join(' ');
+      return '<div class="more-row"><span class="more-iss">'+esc(XC.short(r.issue))+'期</span><span class="more-mid"><b style="color:#003ecb">'+(BDL.liuxiao&&BDL.liuxiao.author?esc(BDL.liuxiao.author):'高手')+'【六肖六码】</b> '+items+'</span><span class="more-res">'+resultHtml(sp,hit,true)+'</span></div>';
+    }).join('')||'<div class="new-empty">暂无高手资料</div>';
+    out+='<section class="new-block"><div class="new-hd">高手资料区 <span>作者资料 · 仅展示</span></div>'+lxHtml+'</section>';
+    // 3 公式规律（真实 danshuang）
+    var ds=ascRows((BDL.danshuang||{}).rows||[]).slice(-8);
+    var dsHtml=ds.map(function(r){
+      var sp=spOf(r),odd=sp?(parseInt(sp.c,10)%2===1):false,hit=!!(sp&&(((r.oddEven==='单数')===odd)||(r.zodiacs||[]).indexOf(sp.z)>=0));
+      var mid='【'+esc(r.oddEven||'')+'+'+esc((r.zodiacs||[]).join(''))+'】';
+      return '<div class="formula-row"><span class="fiss">'+esc(XC.short(r.issue))+'期</span><span class="fmid">'+mid+'</span><span class="fres">'+resultHtml(sp,hit,true)+'</span></div>';
+    }).join('')||'<div class="new-empty">暂无公式规律资料</div>';
+    out+='<section class="new-block"><div class="new-hd">公式规律 <span>单双+三肖 · 近8期</span></div><div class="formula-box">'+dsHtml+'</div></section>';
+    // 4 正版图库（自绘占位，不引用第三方）
+    out+='<section class="new-block"><div class="new-hd">正版图库 <span>自有占位 · 不引用外部图片</span></div><div class="more-gal"><div>资料图版 01</div><div>生肖图版 02</div><div>开奖海报 03</div><div>图库归档 04</div><div>主题封面 05</div><div>资料图版 06</div></div></section>';
+    // 5 全年综合 / 属性知识（num-attrs 真实属性）
+    var zn={};try{(DATA.numAttrs.rows||[]).forEach(function(r){if(r.zodiac){zn[r.zodiac]=zn[r.zodiac]||[];zn[r.zodiac].push(XC.asNum(r.num)+'/'+(r.color||'')+'/'+(r.wuxing||''))}})}catch(e){}
+    var attr=ZODIAC.map(function(z){var a=zn[z]||[];return '<div class="attr-cell"><b>'+z+'</b><span>'+(a.length?a.slice(0,4).join(' '):ZN[z])+'</span></div>'}).join('');
+    out+='<section class="new-block"><div class="new-hd">全年综合 / 属性知识 <span>号码属性 · 仅供查阅</span></div><div class="full-note">当前：新港第 '+esc(XC.short((DATA.games.newhk||{}).issue))+' 期 · 资料区按近 8 期展示；属性取自号码属性表。</div><div class="attr-grid">'+attr+'</div></section>';
+    el.innerHTML=out;
+  }
   function renderPoem(){
     try{var rows=(DATA.poems&&DATA.poems.rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});if(rows[0]&&rows[0].poem){document.querySelector('#poemWrap p').innerHTML=esc(rows[0].poem).replace(/，/g,'，<br>')}}catch(e){}
   }
@@ -250,12 +288,12 @@
     document.getElementById('zodNow').textContent='当前：'+v.name+' · '+XC.fmtIssue(v.issue);
     document.getElementById('marqueeText').innerHTML='彩霸王 · 开奖数据每日更新 · 资料仅供参考 &nbsp;<b>开奖直播</b> <i>历史归档</i> <u>生肖玄机</u> <em>图库精选</em>';
     renderBoardData();
-    renderExtraBlocks();
+    renderExtraBlocks();renderMoreBlocks();
   }
-  function switchGame(k){if(!view(k))return;CUR=k;renderAll();renderBoardData();renderExtraBlocks()}
+  function switchGame(k){if(!view(k))return;CUR=k;renderAll();renderBoardData();renderExtraBlocks();renderMoreBlocks()}
   document.getElementById('channels').addEventListener('click',function(e){var a=e.target.closest('[data-k]');if(!a)return;e.preventDefault();switchGame(a.getAttribute('data-k'))});
   document.getElementById('refreshBtn').addEventListener('click',function(){load()});
-  function load(){setLoading('数据读取中…');XC.load().then(function(d){DATA=d;var _maps=buildSpecialMap();SPMAP=_maps.sp;DRAWMAP=_maps.all;COLORMAP=buildColorMap();document.getElementById('loading').style.display='none';renderAll();renderHot();renderPoem();renderZodiac();startTick();return XC.loadBoards()}).then(function(b){BDL=b||{};renderBoardData();renderExtraBlocks()}).catch(function(e){setLoading('数据读取失败，请稍后刷新',true);console.error(e)})}
+  function load(){setLoading('数据读取中…');XC.load().then(function(d){DATA=d;var _maps=buildSpecialMap();SPMAP=_maps.sp;DRAWMAP=_maps.all;COLORMAP=buildColorMap();document.getElementById('loading').style.display='none';renderAll();renderHot();renderPoem();renderZodiac();startTick();return XC.loadBoards()}).then(function(b){BDL=b||{};renderBoardData();renderExtraBlocks();renderMoreBlocks()}).catch(function(e){setLoading('数据读取失败，请稍后刷新',true);console.error(e)})}
   renderBoards();document.getElementById('zodGrid').innerHTML=ZODIAC.map(function(z){return '<div class="zcell"><b>'+z+'</b><span>'+ZN[z]+'</span></div>'}).join('');load();
 })();
 </script>

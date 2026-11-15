@@ -346,3 +346,30 @@ body{font-size:15px}
 @media(max-width:360px){.lx-row{grid-template-columns:38px 1fr 72px;font-size:12.5px}.lx-iss{font-size:12.5px}.lx-res{font-size:11px}.ds-row{font-size:12.5px}.ds-res{font-size:11px}.pk-row{grid-template-columns:35px 1fr 33px 1fr;font-size:12.5px}.pick-head{font-size:12.5px}}
 
 .pk-pending{padding:10px 4px;text-align:center;color:#8a6a33;font-size:14px;font-weight:900}
+
+/* ===== 更多资料（参考站结构改写） ===== */
+#moreData{padding-bottom:3px}
+.more-row{display:flex;align-items:center;gap:5px;padding:5px 6px;border-top:1px solid #ead8ad;font-size:14px;line-height:1.45;min-width:0}
+.more-row:first-child{border-top:0}
+.more-iss{flex:0 0 40px;color:#d40000;font-family:"Arial Black",Arial,sans-serif;font-weight:900;font-size:13px}
+.more-mid{flex:1 1 auto;min-width:0;white-space:normal;overflow:hidden;color:#4a2a00;font-weight:700}
+.more-res{flex:0 0 auto;font-size:12px;color:#6b1b00;white-space:nowrap;font-weight:900}
+.more-res .ok{color:#007a2e}.more-res .no{color:#999}
+.more-row .hit{background:#ffe600;color:#b00000;border-radius:2px;padding:0 2px;font-weight:900}
+.more-row .wave-red{color:#d40000}.more-row .wave-blue{color:#003ecb}.more-row .wave-green{color:#007a2e}
+.formula-box{padding:4px 6px}
+.formula-row{display:flex;gap:5px;align-items:center;padding:5px 0;border-bottom:1px dotted #e0cfa8;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden}
+.formula-row:last-child{border-bottom:0}
+.formula-row .fiss{flex:0 0 40px;color:#d40000;font-family:"Arial Black",Arial,sans-serif;font-weight:900;font-size:13px}
+.formula-row .fmid{flex:1;min-width:0;background:#ffe600;color:#b00000;padding:1px 4px;border-radius:2px;overflow:hidden;text-overflow:ellipsis}
+.formula-row .fres{flex:0 0 auto;font-size:12px;color:#6b1b00}
+.formula-row .wave-red{color:#d40000}.formula-row .wave-blue{color:#003ecb}.formula-row .wave-green{color:#007a2e}
+.more-gal{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;padding:5px}
+.more-gal div{height:62px;border:1px solid #d40000;background:linear-gradient(135deg,#190026,#5c004f,#d40000);color:#ffe600;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.4}
+.more-gal div:nth-child(2n){background:linear-gradient(135deg,#001b3d,#003ecb,#00c4ff)}
+.more-gal div:nth-child(3n){background:linear-gradient(135deg,#002b10,#007a2e,#adff2f);color:#082b00}
+.attr-note{padding:6px 8px;font-size:12px;color:#6b4a10;line-height:1.6;background:#fffdf4}
+.attr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:0 5px 5px}
+.attr-cell{border:1px solid #d9a845;background:#fffdf6;padding:4px 2px;text-align:center;min-width:0}
+.attr-cell b{display:block;color:#d40000;font-size:14px;font-weight:900}.attr-cell span{display:block;color:#6b4a10;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.full-note{padding:6px 8px;font-size:12px;color:#4a2a00;line-height:1.6;background:#fff7d7;border-bottom:1px dotted #e0cfa8}
