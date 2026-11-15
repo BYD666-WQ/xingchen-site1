@@ -248,8 +248,8 @@
     // 1 彩霸王内幕五肖五码（真实 wuxiao）
     var wx=ascRows((BDL.wuxiao||{}).rows||[]).slice(-8);
     var wxHtml=wx.map(function(r){
-      var sp=spOf(r),hit=false,items=(r.list||[]).map(function(x){var on=!!(sp&&(x.z===sp.z||XC.asNum(x.c)===sp.c));if(on)hit=true;return (on?'<span class="hit">':'' )+esc(x.z)+esc(x.c)+(on?'</span>':'')}).join(' ');
-      return '<div class="more-row"><span class="more-iss">'+esc(XC.short(r.issue))+'期</span><span class="more-mid">'+items+'</span><span class="more-res">'+resultHtml(sp,hit,true)+'</span></div>';
+      var sp=spOf(r),hit=false,items=(r.list||[]).map(function(x){var on=!!(sp&&(x.z===sp.z||XC.asNum(x.c)===sp.c));if(on)hit=true;return (on?'<span class="hit">':'' )+esc(x.z)+esc(x.c)+(on?'</span>':'')}).join('.');
+      return '<div class="more-row"><span class="more-iss">'+esc(XC.short(r.issue))+'期</span><span class="more-mid">【'+items+'】</span><span class="more-res">'+resultHtml(sp,hit,true)+'</span></div>';
     }).join('')||'<div class="new-empty">暂无五肖五码资料</div>';
     out+='<section class="new-block"><div class="new-hd">彩霸王内幕五肖五码 <span>参考站行格式 · 我们数据</span></div>'+wxHtml+'</section>';
     // 2 高手资料区（真实 liuxiao 作者+六肖）
