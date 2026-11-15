@@ -33,6 +33,7 @@
   <div class="grid3" id="boards"></div>
   <div class="sec-title">九板块数据 <span>近 6 期 · 只标命中</span></div>
   <div id="boardsData"><div class="board-empty">板块数据读取中…</div></div>
+  <div id="extraData"><div class="board-empty">新增资料读取中…</div></div>
   <div class="bigline"><span class="big">彩霸王</span><span class="txt">开奖<i>快</i>人一步</span><span class="badge">资料站</span></div>
   <div id="histWrap"><div class="hist-head" id="histHead">近期开奖 · 加载中</div><div class="hist" id="hist"></div></div>
   <div id="poemWrap" class="poem"><div class="poem-hd"><b>玄机诗象</b> · 本期观点</div><p>龙争虎斗，马到成功；<br><span>留意单数生肖</span>，<em>特码看虎马羊</em>。</p></div>
@@ -90,7 +91,7 @@
     document.getElementById('hotlist').innerHTML=out.join('');
   }
 
-  var BDL=null,SPMAP=null,COLORMAP=null;
+  var BDL=null,SPMAP=null,DRAWMAP=null,COLORMAP=null;
   var BOARD_DEFS=[
     {key:'pick',title:'本期内幕精选',type:'pick'},
     {key:'wuxiao',title:'五肖五码',type:'wuxiao'},
@@ -105,9 +106,10 @@
   ];
   function sortRows(rows){return (rows||[]).slice().sort(function(a,b){return (parseInt(a.issue,10)||0)-(parseInt(b.issue,10)||0)})}
   function buildSpecialMap(){
-    var map={};function add(issue,nums){var a=XC.norm(nums);if(a.length===7)map[XC.short(issue)]=a[6]}
+    var map={},all={};
+    function add(issue,nums){var a=XC.norm(nums);if(a.length===7){map[XC.short(issue)]=a[6];all[XC.short(issue)]=a.map(function(x){return x.z})}}
     if(DATA&&DATA.manualRaw){add(DATA.manualRaw.issue,DATA.manualRaw.nums);if(DATA.games.newhk&&DATA.games.newhk.nums)add(DATA.games.newhk.issue,DATA.games.newhk.nums);(DATA.manualRaw.history||[]).forEach(function(x){add(x.issue,x.nums)})}
-    return map;
+    return {sp:map,all:all};
   }
   function buildColorMap(){
     var m={};try{(DATA.numAttrs.rows||[]).forEach(function(r){if(r.num&&r.color)m[XC.asNum(r.num)]=r.color})}catch(e){}
@@ -182,6 +184,51 @@
     }).join('');
     el.innerHTML=html;
   }
+
+  var CN=['零','一','二','三','四','五','六','七','八','九','十'];
+  function ascRows(rows){return (rows||[]).slice().sort(function(a,b){return (parseInt(a.issue,10)||0)-(parseInt(b.issue,10)||0)})}
+  function waveClass(c){var n=XC.numClass(c);return n==='red'?'red':(n==='blue'?'blue':'green')}
+  function resultHtml(sp,hit,hasWord){
+    if(!sp)return '开:? <span class="wave-green">+00</span>'+(hasWord?'<b class="no">待开</b>':'');
+    return '开:'+esc(sp.z)+'<span class="wave-'+waveClass(sp.c)+'">+'+esc(sp.c)+'</span>'+(hasWord?'<b class="'+(hit?'ok':'no')+'">'+(hit?'中':'错')+'</b>':'');
+  }
+  function drawZod(issue){return (DRAWMAP&&DRAWMAP[XC.short(issue)])||[]}
+  function interCount(list,draw){var c=0;(list||[]).forEach(function(z){if(draw.indexOf(z)>=0)c++});return c}
+  function renderExtraBlocks(){
+    var el=document.getElementById('extraData');if(!el)return;
+    if(!DATA){el.innerHTML='<div class="new-empty">资料读取中…</div>';return}
+    if(CUR!=='newhk'){el.innerHTML='<div class="new-empty">暂无该彩种新增资料（当前已接入新港）</div>';return}
+    if(!BDL){el.innerHTML='<div class="new-empty">新增资料读取中…</div>';return}
+    var out='';
+    // ① 六肖列表
+    var lx=ascRows((BDL.liuxiao||{}).rows||[]).slice(-8);
+    var lxHtml=lx.map(function(r){
+      var sp=spOf(r),list=r.list||[],hit=!!(sp&&list.some(function(x){return x.z===sp.z}));
+      var lines=[list.slice(0,3),list.slice(3,6)].map(function(g){return '<span class="pl">'+g.map(function(x){return (sp&&x.z===sp.z?'<span class="hit">'+esc(x.z)+'</span>':esc(x.z))+esc(x.c)}).join('.')+'</span>'}).join('');
+      return '<div class="lx-row"><span class="lx-iss">'+esc(XC.short(r.issue))+'期</span><span class="lx-pairs">'+lines+'</span><span class="lx-res">'+resultHtml(sp,hit,true)+'</span></div>';
+    }).join('')||'<div class="new-empty">暂无六肖资料</div>';
+    out+='<section class="new-block pick-card"><div class="new-hd">六肖列表 <span>六肖六码 · 命中黄标</span></div>'+lxHtml+'</section>';
+    // ② 单双
+    var ds=ascRows((BDL.danshuang||{}).rows||[]).slice(-8);
+    var dsHtml=ds.map(function(r){
+      var sp=spOf(r),isOdd=sp?(parseInt(sp.c,10)%2===1):false,hit=!!(sp&&(((r.oddEven==='单数')===isOdd)||(r.zodiacs||[]).indexOf(sp.z)>=0));
+      var bracket='【'+esc(r.oddEven||'')+'+'+esc((r.zodiacs||[]).join(''))+'】';
+      return '<div class="ds-row"><span class="ds-iss">'+esc(XC.short(r.issue))+'期:单双</span><span class="ds-hi">'+bracket+'</span><span class="ds-res">'+resultHtml(sp,hit,true)+'</span></div>';
+    }).join('')||'<div class="new-empty">暂无单双资料</div>';
+    out+='<section class="new-block"><div class="new-hd">单双 <span>【】命中区 · 特码波色</span></div>'+dsHtml+'</section>';
+    // ③ 一肖一码
+    var picks=ascRows((DATA.pick&&DATA.pick.rows)||[]).slice(-6);
+    var pickHtml=picks.map(function(p){
+      var sp=spOf(p),dz=drawZod(p.issue),q=p.pick||{};
+      var c7=interCount(p.seven.zodiac,dz),c5=interCount(p.five.zodiac,dz),c3=interCount(p.three.zodiac,dz),mx=Math.max(c7,c5,c3);
+      var exact=!!(sp&&q.zodiac===sp.z&&XC.asNum(q.num)===sp.c);
+      var label=exact?(q.zodiac+'-'+q.num):(sp?(mx?('中'+CN[mx]+'肖'):'未中'):'待开');
+      function zRow(name,zod,nums,marker){var zs=(zod||[]).map(function(z){return dz.indexOf(z)>=0?'<span class="hit">'+esc(z)+'</span>':esc(z)}).join('');return '<div class="pk-row"><span class="pk-l">'+name+'</span><span class="pk-z">'+zs+'</span><span class="pk-l">'+marker+'</span><span class="pk-n">'+(nums||[]).join(' ')+'</span></div>'}
+      return '<div class="pick-card"><div class="pick-head">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div><div class="pick-wm">资料展示 · 占位水印</div><div class="pick-body">'+zRow('七肖:',p.seven.zodiac,p.seven.nums,'⑦码:')+zRow('五肖:',p.five.zodiac,p.five.nums,'⑤码:')+zRow('三肖:',p.three.zodiac,p.three.nums,'③码:')+'</div></div>';
+    }).join('')||'<div class="new-empty">暂无精选资料</div>';
+    out+='<section class="new-block"><div class="new-hd">一肖一码 <span>精选 · 按实际开奖对照</span></div>'+pickHtml+'</section>';
+    el.innerHTML=out;
+  }
   function renderPoem(){
     try{var rows=(DATA.poems&&DATA.poems.rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});if(rows[0]&&rows[0].poem){document.querySelector('#poemWrap p').innerHTML=esc(rows[0].poem).replace(/，/g,'，<br>')}}catch(e){}
   }
@@ -195,11 +242,12 @@
     document.getElementById('zodNow').textContent='当前：'+v.name+' · '+XC.fmtIssue(v.issue);
     document.getElementById('marqueeText').innerHTML='彩霸王 · 开奖数据每日更新 · 资料仅供参考 &nbsp;<b>开奖直播</b> <i>历史归档</i> <u>生肖玄机</u> <em>图库精选</em>';
     renderBoardData();
+    renderExtraBlocks();
   }
-  function switchGame(k){if(!view(k))return;CUR=k;renderAll();renderBoardData()}
+  function switchGame(k){if(!view(k))return;CUR=k;renderAll();renderBoardData();renderExtraBlocks()}
   document.getElementById('channels').addEventListener('click',function(e){var a=e.target.closest('[data-k]');if(!a)return;e.preventDefault();switchGame(a.getAttribute('data-k'))});
   document.getElementById('refreshBtn').addEventListener('click',function(){load()});
-  function load(){setLoading('数据读取中…');XC.load().then(function(d){DATA=d;SPMAP=buildSpecialMap();COLORMAP=buildColorMap();document.getElementById('loading').style.display='none';renderAll();renderHot();renderPoem();renderZodiac();startTick();return XC.loadBoards()}).then(function(b){BDL=b||{};renderBoardData()}).catch(function(e){setLoading('数据读取失败，请稍后刷新',true);console.error(e)})}
+  function load(){setLoading('数据读取中…');XC.load().then(function(d){DATA=d;var _maps=buildSpecialMap();SPMAP=_maps.sp;DRAWMAP=_maps.all;COLORMAP=buildColorMap();document.getElementById('loading').style.display='none';renderAll();renderHot();renderPoem();renderZodiac();startTick();return XC.loadBoards()}).then(function(b){BDL=b||{};renderBoardData();renderExtraBlocks()}).catch(function(e){setLoading('数据读取失败，请稍后刷新',true);console.error(e)})}
   renderBoards();document.getElementById('zodGrid').innerHTML=ZODIAC.map(function(z){return '<div class="zcell"><b>'+z+'</b><span>'+ZN[z]+'</span></div>'}).join('');load();
 })();
 </script>
