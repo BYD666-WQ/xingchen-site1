@@ -31,6 +31,8 @@
   <div class="datebar"><span id="todayText">今天</span><span class="zod" id="zodNow">资料更新</span><span class="right">数据仅供参考</span></div>
   <div class="count-banner"><div class="count-inner"><div class="label"><span id="nextIssueLabel">第319期</span><b>开奖倒计时</b></div><div class="clock"><span id="h">00</span><i>:</i><span id="m">00</span><i>:</i><span id="s">00</span></div></div></div>
   <div class="grid3" id="boards"></div>
+  <div class="sec-title">九板块数据 <span>近 6 期 · 只标命中</span></div>
+  <div id="boardsData"><div class="board-empty">板块数据读取中…</div></div>
   <div class="bigline"><span class="big">新港彩讯</span><span class="txt">开奖<i>快</i>人一步</span><span class="badge">资料站</span></div>
   <div id="histWrap"><div class="hist-head" id="histHead">近期开奖 · 加载中</div><div class="hist" id="hist"></div></div>
   <div id="poemWrap" class="poem"><div class="poem-hd"><b>玄机诗象</b> · 本期观点</div><p>龙争虎斗，马到成功；<br><span>留意单数生肖</span>，<em>特码看虎马羊</em>。</p></div>
@@ -85,16 +87,113 @@
     out.push('<div class="hotrow"><a href="gallery.html"><span class="t"><b>图库:</b> 开奖海报与主题图集</span></a></div>');
     document.getElementById('hotlist').innerHTML=out.join('');
   }
+
+  var BDL=null,SPMAP=null,COLORMAP=null;
+  var BOARD_DEFS=[
+    {key:'pick',title:'本期内幕精选',type:'pick'},
+    {key:'wuxiao',title:'五肖五码',type:'wuxiao'},
+    {key:'santou',title:'高手三头',type:'santou'},
+    {key:'shuangbo',title:'必赢双波',type:'shuangbo'},
+    {key:'danshuang',title:'单双',type:'danshuang'},
+    {key:'liuxiao',title:'六肖六码',type:'liuxiao'},
+    {key:'qiwei',title:'七尾中特',type:'qiwei'},
+    {key:'sisha',title:'死杀三肖',type:'sisha'},
+    {key:'pingte',title:'平特①肖',type:'pingte'},
+    {key:'danshuangsixiao',title:'单双四肖',type:'danshuangsixiao'}
+  ];
+  function sortRows(rows){return (rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)})}
+  function buildSpecialMap(){
+    var map={};function add(issue,nums){var a=XC.norm(nums);if(a.length===7)map[XC.short(issue)]=a[6]}
+    if(DATA&&DATA.manualRaw){add(DATA.manualRaw.issue,DATA.manualRaw.nums);if(DATA.games.newhk&&DATA.games.newhk.nums)add(DATA.games.newhk.issue,DATA.games.newhk.nums);(DATA.manualRaw.history||[]).forEach(function(x){add(x.issue,x.nums)})}
+    return map;
+  }
+  function buildColorMap(){
+    var m={};try{(DATA.numAttrs.rows||[]).forEach(function(r){if(r.num&&r.color)m[XC.asNum(r.num)]=r.color})}catch(e){}
+    return m;
+  }
+  function spOf(row){
+    if(row&&row.special&&row.special.z)return {c:XC.asNum(row.special.c),z:row.special.z,color:row.special.color||''};
+    return (SPMAP&&SPMAP[XC.short(row&&row.issue)])||null;
+  }
+  function colorOf(c){if(COLORMAP&&COLORMAP[XC.asNum(c)])return COLORMAP[XC.asNum(c)];var cls=XC.numClass(c);return cls==='red'?'红':(cls==='blue'?'蓝':'绿')}
+  function hitSpan(txt,hit,cls){return '<span class="'+(hit?'hit ':'')+(cls||'')+'">'+esc(txt)+'</span>'}
+  function rowWrap(issue,body,extra,sp){return '<div class="board-row"><span class="bi">'+esc(XC.short(issue))+'</span><span class="bd">'+body+(sp?' <span class="sp">开:'+esc(sp.z)+esc(sp.c)+'</span>':'')+'</span><span class="bo">'+extra+'</span></div>'}
+  function boardRows(def){
+    if(def.type==='pick')return sortRows(DATA.pick.rows||[]).slice(0,6);
+    if(!BDL||!BDL[def.key])return [];
+    return sortRows((BDL[def.key]||{}).rows||[]).slice(0,6);
+  }
+  function renderBoardRow(def,row){
+    var sp=spOf(row);
+    if(def.type==='pick'){
+      if(!row||!row.pick)return '';
+      var pz=row.pick.zodiac,pn=XC.asNum(row.pick.num);
+      var hz=!!(sp&&sp.z===pz),hn=!!(sp&&sp.c===pn);
+      return rowWrap(row.issue,'精选 '+hitSpan(pz,hz)+'-'+hitSpan(pn,hn),'<small>'+esc(row.seven&&row.seven.zodiac?row.seven.zodiac.slice(0,3).join(''):'')+'</small>',sp);
+    }
+    if(def.type==='wuxiao'||def.type==='liuxiao'){
+      var list=row.list||[];var text=list.map(function(x){var hit=!!(sp&&(x.z===sp.z||XC.asNum(x.c)===sp.c));return hitSpan(x.z+x.c,hit)}).join(' ');
+      return rowWrap(row.issue,text,'',sp);
+    }
+    if(def.type==='santou'){
+      var head=sp?Math.floor(parseInt(sp.c,10)/10):-1;var text=(row.heads||[]).map(function(x){return hitSpan(x+'头',x===head)}).join(' ');
+      return rowWrap(row.issue,text,'',sp);
+    }
+    if(def.type==='shuangbo'){
+      var col=sp?colorOf(sp.color||sp.c):'';var text=(row.waves||[]).map(function(x){return hitSpan(x+'波',x===col)}).join(' + ');
+      return rowWrap(row.issue,text,'',sp);
+    }
+    if(def.type==='danshuang'){
+      var isOdd=sp?(parseInt(sp.c,10)%2===1):false;var oe=hitSpan(row.oddEven||'',sp&&((row.oddEven==='单数')===isOdd));var zs=(row.zodiacs||[]).map(function(z){return hitSpan(z,sp&&z===sp.z)}).join('');
+      return rowWrap(row.issue,oe+' + '+zs,'',sp);
+    }
+    if(def.type==='qiwei'){
+      var tail=sp?String(parseInt(sp.c,10)%10):'';var text=String(row.tails||'').split('').map(function(x){return hitSpan(x,x===tail)}).join(' ');
+      return rowWrap(row.issue,'尾 '+text,'',sp);
+    }
+    if(def.type==='sisha'){
+      var killed=(row.sisha||[]).join('');var hit=!!(sp&&(row.sisha||[]).indexOf(sp.z)<0);
+      return rowWrap(row.issue,killed, hit?'<span class="res">中</span>':'',sp);
+    }
+    if(def.type==='pingte'){
+      return rowWrap(row.issue,(row.zod||'')+(row.zod||'')+(row.zod||''),'',sp);
+    }
+    if(def.type==='danshuangsixiao'){
+      var odd=sp&&(parseInt(sp.c,10)%2===1);var group=odd?(row.dan||[]):(row.shuang||[]);var label=odd?'单':'双';var text=label+' '+group.map(function(z){return hitSpan(z,!!(sp&&z===sp.z))}).join('');
+      return rowWrap(row.issue,text,'',sp);
+    }
+    return '';
+  }
+  function renderBoardData(){
+    var el=document.getElementById('boardsData');if(!el)return;
+    if(!DATA){el.innerHTML='<div class="board-empty">数据读取中…</div>';return}
+    if(CUR!=='newhk'){el.innerHTML='<div class="board-empty">暂无该彩种板块资料（当前已接入新港）</div>';return}
+    if(!BDL){el.innerHTML='<div class="board-empty">板块数据读取中…</div>';return}
+    var html=BOARD_DEFS.map(function(def){
+      var rows=boardRows(def);var body=rows.map(function(r){return renderBoardRow(def,r)}).join('');
+      for(var i=rows.length;i<3;i++)body+='<div class="board-row empty">暂无更早数据</div>';
+      return '<section class="board-card" data-board="'+def.key+'"><div class="board-hd">'+def.title+'<small>近 '+Math.max(3,rows.length)+' 期</small></div><div class="board-rows">'+body+'</div></section>';
+    }).join('');
+    el.innerHTML=html;
+  }
+  function renderPoem(){
+    try{var rows=(DATA.poems&&DATA.poems.rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});if(rows[0]&&rows[0].poem){document.querySelector('#poemWrap p').innerHTML=esc(rows[0].poem).replace(/，/g,'，<br>')}}catch(e){}
+  }
+  function renderZodiac(){
+    var map={};try{(DATA.numAttrs.rows||[]).forEach(function(r){if(r.zodiac){map[r.zodiac]=map[r.zodiac]||[];map[r.zodiac].push(XC.asNum(r.num))}})}catch(e){}
+    document.getElementById('zodGrid').innerHTML=ZODIAC.map(function(z){var nums=(map[z]||[]).sort(function(a,b){return parseInt(a,10)-parseInt(b,10)});return '<div class="zcell"><b>'+z+'</b><span>'+(nums.length?nums.join(' '):ZN[z])+'</span></div>'}).join('');
+  }
   function renderAll(){
     var v=view(CUR);if(!v)return;renderBalls(v);renderHistory(v);setActiveTab();tick();
     document.getElementById('todayText').textContent='今：'+XC.fmtDate(new Date())+' · 资料更新';
     document.getElementById('zodNow').textContent='当前：'+v.name+' · '+XC.fmtIssue(v.issue);
     document.getElementById('marqueeText').innerHTML='新港彩讯 · 开奖数据每日更新 · 资料仅供参考 &nbsp;<b>开奖直播</b> <i>历史归档</i> <u>生肖玄机</u> <em>图库精选</em>';
+    renderBoardData();
   }
-  function switchGame(k){if(!view(k))return;CUR=k;renderAll()}
+  function switchGame(k){if(!view(k))return;CUR=k;renderAll();renderBoardData()}
   document.getElementById('channels').addEventListener('click',function(e){var a=e.target.closest('[data-k]');if(!a)return;e.preventDefault();switchGame(a.getAttribute('data-k'))});
   document.getElementById('refreshBtn').addEventListener('click',function(){load()});
-  function load(){setLoading('数据读取中…');XC.load().then(function(d){DATA=d;document.getElementById('loading').style.display='none';renderAll();renderHot();startTick()}).catch(function(e){setLoading('数据读取失败，请稍后刷新',true);console.error(e)})}
+  function load(){setLoading('数据读取中…');XC.load().then(function(d){DATA=d;SPMAP=buildSpecialMap();COLORMAP=buildColorMap();document.getElementById('loading').style.display='none';renderAll();renderHot();renderPoem();renderZodiac();startTick();return XC.loadBoards()}).then(function(b){BDL=b||{};renderBoardData()}).catch(function(e){setLoading('数据读取失败，请稍后刷新',true);console.error(e)})}
   renderBoards();document.getElementById('zodGrid').innerHTML=ZODIAC.map(function(z){return '<div class="zcell"><b>'+z+'</b><span>'+ZN[z]+'</span></div>'}).join('');load();
 })();
 </script>

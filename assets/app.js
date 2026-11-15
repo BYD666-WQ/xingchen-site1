@@ -27,13 +27,21 @@
     fetchOne('data/manual-draw.json').catch(function(){return {}}),
     fetchOne('data/pick.json').catch(function(){return {rows:[]}}),
     fetchOne('data/manual-ziliao.json').catch(function(){return {rows:[]}}),
-    fetchOne('data/site-config.json').catch(function(){return {}})
+    fetchOne('data/site-config.json').catch(function(){return {}}),
+    fetchOne('data/poems.json').catch(function(){return {rows:[]}}),
+    fetchOne('data/num-attrs.json').catch(function(){return {rows:[]}})
   ]).then(function(a){
-    var d={draw:a[0]||{},manualRaw:mdCompat(a[1]||{}),pick:a[2]||{},ziliao:a[3]||{},config:a[4]||{}};
+    var d={draw:a[0]||{},manualRaw:mdCompat(a[1]||{}),pick:a[2]||{},ziliao:a[3]||{},config:a[4]||{},poems:a[5]||{rows:[]},numAttrs:a[6]||{rows:[]}};
     d.config.drawTimes=d.config.drawTimes||{newhk:{time:'21:34',days:[0,1,2,3,4,5,6]},newmo:{time:'21:30',days:[0,1,2,3,4,5,6]},hk:{time:'21:30',days:[0]}};
     d.games=build(d);
     return d;
   })}
+  var BOARD_FILES=['wuxiao','santou','shuangbo','danshuang','liuxiao','qiwei','sisha','pingte','danshuangsixiao'];
+  function loadBoards(){
+    return Promise.all(BOARD_FILES.map(function(n){return fetchOne('data/'+n+'.json').catch(function(){return {rows:[],error:true}}).then(function(x){x.__key=n;return x})})).then(function(arr){
+      var out={};arr.forEach(function(x){out[x.__key]=x});return out;
+    });
+  }
   function drawGame(draw,rule){return (draw.games||[]).filter(function(g){return g.rule===rule||(rule==='Macau'&&g.name==='新澳彩')||(rule==='HongKong'&&g.name==='香港彩')})[0]||null}
   function viewFromDraw(g,name,key,cfg,now){if(!g)return null;var nums=norm(g.nums),hist=(g.history||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});var cur=hist[0];var display=cur||{issue:g.issue,nums:nums};var issue=parseInt(g.issue,10)||parseInt(display.issue,10)||0;if(!nums.length&&cur)nums=norm(cur.nums);var t=cfg.drawTimes[key]||{};var next=nextAt(t.time,t.days,now);return {key:key,name:name,issue:issue,currentIssue:issue,nums:nums.length?nums:norm(display.nums),history:hist,state:nums.length?'已开奖':'待开奖',nextTime:next,nextIssue:issue+1,drawTime:t.time}}
   function build(d){
@@ -50,5 +58,5 @@
   function fmtIssue(v){return short(v)+'期'}
   function ballHtml(nums,opts){opts=opts||{};var a=(nums||[]).slice(0,7);return a.map(function(x,i){var cls=numClass(x.c);return '<div class="nc '+cls+(i===6?' gold':'')+'"><b>'+x.c+'</b><i>'+(x.z||'')+'</i></div>'}).join('')}
   function histLine(h){var nums=norm(h.nums),n=nums.map(function(x){return x.c}),sp=nums[6]||{};return '<span class="iss">'+short(h.issue)+'期:</span> <span class="balltxt">'+n.slice(0,6).join(' ')+'</span> <span class="gold">+ '+sp.c+'</span> <span class="tag">特 '+(sp.z||'')+'</span>'}
-  global.XC={load:load,pad:pad,p2:p2,short:short,asNum:asNum,vfDec:vfDec,mdCompat:mdCompat,norm:norm,numClass:numClass,nextAt:nextAt,fmtDate:fmtDate,fmtTime:fmtTime,ballHtml:ballHtml,histLine:histLine,fmtIssue:fmtIssue,drawGame:drawGame};
+  global.XC={load:load,loadBoards:loadBoards,pad:pad,p2:p2,short:short,asNum:asNum,vfDec:vfDec,mdCompat:mdCompat,norm:norm,numClass:numClass,nextAt:nextAt,fmtDate:fmtDate,fmtTime:fmtTime,ballHtml:ballHtml,histLine:histLine,fmtIssue:fmtIssue,drawGame:drawGame};
 })(window);
