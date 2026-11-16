@@ -1,6 +1,6 @@
 {
  "name": "彩霸王资料",
- "updated": "2026-11-16T16:50:38.239Z",
+ "updated": "2026-11-16T16:51:06.854Z",
  "sections": [
   {
    "id": "liuxiao",
@@ -2009,6 +2009,30 @@
      "text": "内幕【提前公开】",
      "status": "live",
      "updated": "2026-11-16T13:22:55.253Z"
+    }
+   ]
+  },
+  {
+   "id": "deleteme",
+   "title": "临时测试块",
+   "type": "six",
+   "note": "",
+   "rows": [
+    {
+     "issue": "999",
+     "list": [
+      {
+       "z": "鼠",
+       "c": "01",
+       "color": ""
+      }
+     ],
+     "special": {
+      "z": "鼠",
+      "c": "01",
+      "color": ""
+     },
+     "result": "中"
     }
    ]
   }
