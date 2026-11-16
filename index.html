@@ -137,6 +137,10 @@
     if(CUR!=='newhk')return false;
     var target=(REVEAL&&REVEAL.phase==='waiting')?REVEAL.issue:null;
     var c=target?issueDraw(target):currentDrawData();
+    if(freshOnly&&(!c||!c.nums||!c.nums.length)){
+      var md=DATA&&DATA.manualRaw;var h=md&&(md.history||[])[0];
+      if(h)c=issueDraw(h.issue);
+    }
     if(!c||!c.visible||c.nums.length!==7)return false;
     if(freshOnly&&(!c.when||Date.now()-c.when>10*60*1000))return false;
     if(localDone(c.issue))return false;
