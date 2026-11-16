@@ -420,3 +420,7 @@ body{font-size:15px}
 .ten-tail:first-of-type{border-top:0}
 .ten-tail-h{text-align:center;font-size:15px;color:#003ecb;margin-bottom:3px}
 .ten-tail-l{white-space:normal;overflow-wrap:anywhere;color:#4a2a00;margin-top:2px}
+
+html{overflow-x:hidden;max-width:100%}
+body{max-width:100%;overflow-x:hidden}
+#tenBlocks{max-width:100%;overflow:hidden}

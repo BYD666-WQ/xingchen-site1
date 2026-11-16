@@ -329,7 +329,7 @@
     var secs=(DATA.siteData&&DATA.siteData.sections)||[];
     secs.forEach(function(s){
       if(known.indexOf(s.id)>=0||s.type==='poem'||s.type==='attrs'||s.type==='ziliao')return;
-      var rs=(s.rows||[]).map(function(r){var mid=r.text||r.note||'';if(!mid){var z=r.zodiacs||r.pair||r.waves||r.heads||r.tails||[];if(Array.isArray(z))z=z.join('');mid=(z||'')+(r.nums&&Array.isArray(r.nums)?' '+r.nums.join(' '):(r.nums||''));if(r.special&&r.special.z)mid+=' 开:'+r.special.z+(r.special.c||'');}return '<div class="ten-row"><span class="ten-iss">'+esc(r.issue||'')+'期</span><span class="ten-mid">'+esc(mid)+'</span></div>'}).join('');
+      var rs=(s.rows||[]).map(function(r){var mid=r.text||r.note||'';if(!mid){var z=r.zodiacs||r.pair||r.waves||r.heads||r.tails||[];if(Array.isArray(z))z=z.join('');if(r.list&&r.list.length){z=r.list.map(function(x){return x.z+x.c}).join(' ')}mid=(z||'')+(r.nums&&Array.isArray(r.nums)?' '+r.nums.join(' '):(r.nums||''));if(r.special&&r.special.z)mid+=' 开:'+r.special.z+(r.special.c||'');}return '<div class="ten-row"><span class="ten-iss">'+esc(r.issue||'')+'期</span><span class="ten-mid">'+esc(mid)+'</span></div>'}).join('');
       out+=tenSection(s.title||s.id,rs||'<div class="new-empty">暂无资料</div>',s.note||'',s.id);
     });
     el.innerHTML=out;
