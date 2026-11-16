@@ -325,7 +325,16 @@
       return '<div class="pick-card"><div class="pick-head">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div><div class="pick-wm">资料展示 · 占位水印</div><div class="pick-body">'+body+'</div></div>';
     }).join('')||'<div class="new-empty">暂无精选资料</div>';
     out+='<section class="new-block"><div class="new-hd">一肖一码 <span>精选 · 按实际开奖对照</span></div>'+pickHtml+'</section>';
+    var known=['liuxiao','jiaye','shuangbo','danshuang','jiuxiao','ersha','pick','santou','qiwei','liangbo'];
+    var secs=(DATA.siteData&&DATA.siteData.sections)||[];
+    secs.forEach(function(s){
+      if(known.indexOf(s.id)>=0||s.type==='poem'||s.type==='attrs'||s.type==='ziliao')return;
+      var rs=(s.rows||[]).map(function(r){var mid=r.text||r.note||'';if(!mid){var z=r.zodiacs||r.pair||r.waves||r.heads||r.tails||[];if(Array.isArray(z))z=z.join('');mid=(z||'')+(r.nums&&Array.isArray(r.nums)?' '+r.nums.join(' '):(r.nums||''));if(r.special&&r.special.z)mid+=' 开:'+r.special.z+(r.special.c||'');}return '<div class="ten-row"><span class="ten-iss">'+esc(r.issue||'')+'期</span><span class="ten-mid">'+esc(mid)+'</span></div>'}).join('');
+      out+=tenSection(s.title||s.id,rs||'<div class="new-empty">暂无资料</div>',s.note||'',s.id);
+    });
     el.innerHTML=out;
+    var ids={};secs.forEach(function(s){ids[s.id]=1});
+    Array.prototype.slice.call(el.children).forEach(function(c){var k=c.getAttribute('data-sec');if(k&&!ids[k])c.parentNode.removeChild(c)});
   }
 
   function renderMoreBlocks(){
@@ -377,7 +386,7 @@
   function hz(z,on){return '<span class="'+(on?'ten-hit':'')+'">'+esc(z)+'</span>'}
   function hnum(c,on){return '<span class="'+(on?'ten-hit':'')+'">'+esc(c)+'</span>'}
   function tr(sp,hit,word){if(!sp)return '开:? <span class="wave-green">+00</span>';return '开:'+esc(sp.z)+'<span class="wave-'+waveClass(sp.c)+'">+'+esc(sp.c)+'</span> <b class="'+(hit?'ten-ok':'ten-no')+'">'+(hit?word:'错')+'</b>'}
-  function tenSection(title,body,note){return '<section class="new-block ten-block"><div class="new-hd">'+title+(note?' <span>'+note+'</span>':'')+'</div>'+body+'</section>'}
+  function tenSection(title,body,note,id){var secs=(DATA&&DATA.siteData&&DATA.siteData.sections)||[];var s=null;for(var i=0;i<secs.length;i++)if(secs[i].id===id)s=secs[i];if(s&&s.title)title=s.title;return '<section class="new-block ten-block" data-sec="'+esc(id||'')+'"><div class="new-hd">'+title+(note?' <span>'+note+'</span>':'')+'</div>'+body+'</section>'}
   function renderTenBlocks(){
     var el=document.getElementById('tenBlocks');if(!el)return;
     if(!DATA){el.innerHTML='<div class="new-empty">资料读取中…</div>';return}
@@ -390,7 +399,7 @@
       var sp=spOf(r),on=false,ps=(r.list||[]).slice(0,6).map(function(x){var h=!!(sp&&x.z===sp.z);if(h)on=true;return '<span class="ten-pi">'+(h?'<span class="ten-hit">'+esc(x.z)+'</span>':esc(x.z))+esc(x.c)+'</span>'});
       return '<div class="ten-lx-row"><div class="ten-iss">'+esc(XC.short(r.issue))+'期</div><div class="ten-pairs"><span>'+ps.slice(0,3).join('.')+'</span><span>'+ps.slice(3,6).join('.')+'</span></div><div class="ten-res">'+tr(sp,on,'中')+'</div></div>';
     }).join('')||'<div class="new-empty">暂无六肖资料</div>';
-    out+=tenSection('六肖精选',six,'');
+    out+=tenSection('六肖精选',six,'','liuxiao');
     // 2 家野
     var jy=lx.map(function(r){
       var sp=spOf(r),p=pickOf(r.issue),zs=(p&&p.three&&p.three.zodiac||[]).slice(0,3);
@@ -402,25 +411,25 @@
       var zhtml=zs.map(function(z){return hz(z,!!(sp&&z===sp.z))}).join('');
       return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">家野 <span class="ten-hi">【'+cat+'+'+zhtml+'】</span></span><span class="ten-res">'+tr(sp,hit,'准')+'</span></div>';
     }).join('')||'<div class="new-empty">暂无家野资料</div>';
-    out+=tenSection('家野',jy+'<div class="ten-note">家禽：牛.马.羊.鸡.狗.猪　野兽：鼠.虎.兔.龙.蛇.猴</div>','示例');
+    out+=tenSection('家野',jy+'<div class="ten-note">家禽：牛.马.羊.鸡.狗.猪　野兽：鼠.虎.兔.龙.蛇.猴</div>','示例','jiaye');
     // 3 必赢双波
     var sb=ascRows((BDL.shuangbo||{}).rows||[]).filter(function(r){return spOf(r)}).slice(-8);
     var s1=sb.map(function(r){var sp=spOf(r),ws=r.waves||[],col=sp?colorOf(sp.c):'',hit=ws.indexOf(col)>=0;var wh=ws.map(function(w){return '<span class="ten-hit'+(w===col?' ten-wave':'')+'">'+esc(w)+'波</span>'}).join(' + ');return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">必赢双波 <span class="ten-hi">【'+wh+'】</span></span><span class="ten-res">'+tr(sp,hit,'准')+'</span></div>'}).join('');
-    out+=tenSection('必赢双波',s1||'<div class="new-empty">暂无双波资料</div>','');
+    out+=tenSection('必赢双波',s1||'<div class="new-empty">暂无双波资料</div>','','shuangbo');
     // 4 单双
     var ds=ascRows((BDL.danshuang||{}).rows||[]).filter(function(r){return spOf(r)}).slice(-8);
     var dsH=ds.map(function(r){var sp=spOf(r),odd=sp?(parseInt(sp.c,10)%2===1):false,hit=!!(sp&&(((r.oddEven==='单数')===odd)||(r.zodiacs||[]).indexOf(sp.z)>=0));var zs=(r.zodiacs||[]).map(function(z){return hz(z,!!(sp&&z===sp.z))}).join('');return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">单双 <span class="ten-hi">【'+esc(r.oddEven||'')+'+'+zs+'】</span></span><span class="ten-res">'+tr(sp,hit,'中')+'</span></div>'}).join('');
-    out+=tenSection('单双',dsH||'<div class="new-empty">暂无单双资料</div>','');
+    out+=tenSection('单双',dsH||'<div class="new-empty">暂无单双资料</div>','','danshuang');
     // 5 跑狗九肖
     var jx=lx.map(function(r){
       var sp=spOf(r),zs=(r.list||[]).map(function(x){return x.z}),p=pickOf(r.issue);if(p&&p.three)zs=zs.concat(p.three.zodiac||[]);zs=zs.concat(ZODIAC);zs=zs.filter(function(z,i,a){return a.indexOf(z)===i}).slice(0,9);
       var hit=!!(sp&&zs.indexOf(sp.z)>=0),zh=zs.map(function(z){return hz(z,!!(sp&&z===sp.z))}).join('');
       return '<div class="ten-nine"><div class="ten-l1">'+esc(XC.short(r.issue))+'期：『跑狗九肖』特开：'+tr(sp,hit,'准').replace(/^开:/,'')+'</div><div class="ten-l2">❀【'+zh+'】❀</div></div>';
     }).join('');
-    out+=tenSection('跑狗九肖',jx||'<div class="new-empty">暂无九肖资料</div>','示例');
+    out+=tenSection('跑狗九肖',jx||'<div class="new-empty">暂无九肖资料</div>','示例','jiuxiao');
     // 6 必杀二肖
     var es=lx.map(function(r){var sp=spOf(r),p=pickOf(r.issue),pair=((p&&p.three&&p.three.zodiac)||(r.list||[]).map(function(x){return x.z})).slice(0,2);var hit=!!(sp&&pair.indexOf(sp.z)<0);return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">必杀二肖 <span class="ten-hi">【'+pair.map(function(z){return hz(z,false)}).join('')+'】</span></span><span class="ten-res">'+tr(sp,hit,'中')+'</span></div>'}).join('');
-    out+=tenSection('必杀二肖',es||'<div class="new-empty">暂无二肖资料</div>','示例');
+    out+=tenSection('必杀二肖',es||'<div class="new-empty">暂无二肖资料</div>','示例','ersha');
     // 7 内幕一肖一码
     var picks=ascRows((DATA.pick&&DATA.pick.rows)||[]).slice(-4);
     var phtml=picks.map(function(p){
@@ -431,18 +440,18 @@
       function row(lab,zod,nums,mark){var zh=(zod||[]).map(function(z){return hz(z,dz.indexOf(z)>=0)}).join('');var nh=(nums||[]).map(function(c){return hnum(c,dz.indexOf(XC.asNum(c))>=0)}).join(' ');return '<div class="ten-pkrow"><span class="ten-pl">'+lab+'</span><span class="ten-pz">'+zh+'</span><span class="ten-pl">'+mark+'</span><span class="ten-pn">'+nh+'</span></div>'}
       return '<div class="ten-pickcard"><div class="ten-blue">彩霸王 预测八肖 真的牛逼</div><div class="ten-ph">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div>'+row('七肖:',p.seven.zodiac,p.seven.nums,'⑦码:')+row('五肖:',p.five.zodiac,p.five.nums,'⑤码:')+row('三肖:',p.three.zodiac,p.three.nums,'③码:')+'</div>';
     }).join('')||'<div class="new-empty">暂无精选资料</div>';
-    out+=tenSection('内幕一肖一码',phtml,'');
+    out+=tenSection('内幕一肖一码',phtml,'','pick');
     // 8 三头中特
     var st=ascRows((BDL.santou||{}).rows||[]).filter(function(r){return spOf(r)}).slice(-8);
     var stH=st.map(function(r){var sp=spOf(r),hs=r.heads||[],hh=hs.map(function(h,i){var on=!!(sp&&Math.floor(parseInt(sp.c,10)/10)===h);return '<span class="ten-head '+(i%2?'g':'r')+(on?' ten-hit':'')+'">'+h+'头</span>'}).join('');return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">三头中特 <span class="ten-hi">【'+hh+'】</span></span><span class="ten-res">開:'+esc(sp.z)+'<span class="wave-'+waveClass(sp.c)+'">+'+esc(sp.c)+'</span></span></div>'}).join('');
-    out+=tenSection('三头中特',stH||'<div class="new-empty">暂无三头资料</div>','');
+    out+=tenSection('三头中特',stH||'<div class="new-empty">暂无三头资料</div>','','santou');
     // 9 四尾12码
     var qw=ascRows((BDL.qiwei||{}).rows||[]).filter(function(r){return spOf(r)}).slice(-6);
     var qH=qw.map(function(r){var sp=spOf(r),tails=String(r.tails||'').split('').filter(function(x){return /\d/.test(x)}),four=tails.slice(0,4),seven=tails.slice(0,7),codes=[];four.forEach(function(t){var arr=[];for(var n=1;n<=49;n++){if(String(n%10)===t)arr.push(('0'+n).slice(-2))}codes=codes.concat(arr.slice(0,3))});codes=codes.slice(0,12);var spTail=sp?String(parseInt(sp.c,10)%10):'';var th=four.map(function(t){return '<span class="'+(t===spTail?'ten-hit':'')+'">'+t+'</span>'}).join('-');var sh=seven.map(function(t){return '<span class="'+(t===spTail?'ten-hit':'')+'">'+t+'</span>'}).join('-');var ch=codes.map(function(c){return '<span class="'+(sp&&XC.asNum(c)===sp.c?'ten-hit':'')+'">'+c+'</span>'}).join('.');return '<div class="ten-tail"><div class="ten-tail-h">'+esc(XC.short(r.issue))+'（四尾12码）彩霸王</div><div class="ten-tail-l">12码：'+ch+'</div><div class="ten-tail-l">4尾：'+th+'</div><div class="ten-tail-l">7尾：'+sh+'</div></div>'}).join('');
-    out+=tenSection('四尾12码',qH||'<div class="new-empty">暂无尾数资料</div>','');
+    out+=tenSection('四尾12码',qH||'<div class="new-empty">暂无尾数资料</div>','','qiwei');
     // 10 两波中特
     var s2=sb.map(function(r){var sp=spOf(r),ws=r.waves||[],col=sp?colorOf(sp.c):'',hit=ws.indexOf(col)>=0;var wh=ws.map(function(w){return '<span class="ten-hit'+(w===col?' ten-wave':'')+'">'+esc(w)+'波</span>'}).join('');return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">两波中特 <span class="ten-hi">【'+wh+'】</span></span><span class="ten-res">特开:'+esc(sp.z)+'<span class="wave-'+waveClass(sp.c)+'">+'+esc(sp.c)+'</span> <b class="'+(hit?'ten-ok':'ten-no')+'">'+(hit?'准':'错')+'</b></span></div>'}).join('');
-    out+=tenSection('两波中特',s2||'<div class="new-empty">暂无两波资料</div>','');
+    out+=tenSection('两波中特',s2||'<div class="new-empty">暂无两波资料</div>','','liangbo');
     el.innerHTML=out;
   }
   function renderAll(){

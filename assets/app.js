@@ -1,6 +1,7 @@
 (function(global){
   'use strict';
   var MAIN='BYD666-WQ/xingchen-caixun';
+  var SITE='BYD666-WQ/xingchen-site1';
   var SOURCES=[
     function(p){return 'https://byd666-wq.github.io/xingchen-caixun/'+p+'?t='+Date.now()},
     function(p){return 'https://cdn.jsdelivr.net/gh/'+MAIN+'@main/'+p+'?t='+Date.now()},
@@ -22,26 +23,26 @@
   function fmtTime(d){return pad(d.getHours())+':'+pad(d.getMinutes())}
   function dateKey(issue){return String(issue==null?'':issue)}
   function fetchOne(p){var i=0;function go(){if(i>=SOURCES.length)return Promise.reject(new Error('load fail '+p));var k=i++,u=SOURCES[k](p);var AC=(typeof AbortController!=='undefined')?new AbortController():null;var timer=AC?setTimeout(function(){try{AC.abort()}catch(e){}},4500):null;return fetch(u,{cache:'no-store',signal:AC?AC.signal:undefined}).then(function(r){if(timer)clearTimeout(timer);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).catch(function(e){if(timer)clearTimeout(timer);return go()})}return go()}
+  function fetchOwn(p){var SS=['','https://cdn.jsdelivr.net/gh/'+SITE+'@main/','https://raw.githubusercontent.com/'+SITE+'/main/'];var i=0;function go(){if(i>=SS.length)return Promise.reject(new Error('own fail '+p));var k=i++,u=SS[k]+p+'?t='+Date.now();var AC=(typeof AbortController!=='undefined')?new AbortController():null;var timer=AC?setTimeout(function(){try{AC.abort()}catch(e){}},4500):null;return fetch(u,{cache:'no-store',signal:AC?AC.signal:undefined}).then(function(r){if(timer)clearTimeout(timer);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).catch(function(e){if(timer)clearTimeout(timer);return go()})}return go()}
+  var OWN_BOARDS={};
   function load(){return Promise.all([
     fetchOne('data/draw.json').catch(function(){return {games:[]}}),
     fetchOne('data/manual-draw.json').catch(function(){return {}}),
-    fetchOne('data/pick.json').catch(function(){return {rows:[]}}),
-    fetchOne('data/manual-ziliao.json').catch(function(){return {rows:[]}}),
-    fetchOne('data/site-config.json').catch(function(){return {}}),
-    fetchOne('data/poems.json').catch(function(){return {rows:[]}}),
-    fetchOne('data/num-attrs.json').catch(function(){return {rows:[]}})
+    fetchOwn('data/site-data.json').catch(function(){return {sections:[]}}),
+    fetchOne('data/site-config.json').catch(function(){return {}})
   ]).then(function(a){
-    var d={draw:a[0]||{},manualRaw:mdCompat(a[1]||{}),pick:a[2]||{},ziliao:a[3]||{},config:a[4]||{},poems:a[5]||{rows:[]},numAttrs:a[6]||{rows:[]}};
+    var own=a[2]||{sections:[]},by={};(own.sections||[]).forEach(function(s){by[s.id]=s});
+    function sec(id){return (by[id]&&by[id].rows)||[]}
+    own.by=by;
+    var d={draw:a[0]||{},manualRaw:mdCompat(a[1]||{}),config:a[3]||{},siteData:own,pick:{rows:sec('pick')},ziliao:{rows:sec('ziliao')},poems:{rows:sec('poems')},numAttrs:{rows:sec('numAttrs')}};
     d.config.drawTimes=d.config.drawTimes||{newhk:{time:'21:34',days:[0,1,2,3,4,5,6]},newmo:{time:'21:30',days:[0,1,2,3,4,5,6]},hk:{time:'21:30',days:[0]}};
+    OWN_BOARDS={};['liuxiao','shuangbo','danshuang','santou','qiwei','wuxiao'].forEach(function(id){OWN_BOARDS[id]={rows:sec(id)}});
+    d.__boards=OWN_BOARDS;
     d.games=build(d);
     return d;
   })}
   var BOARD_FILES=['wuxiao','santou','shuangbo','danshuang','liuxiao','qiwei','sisha','pingte','danshuangsixiao'];
-  function loadBoards(){
-    return Promise.all(BOARD_FILES.map(function(n){return fetchOne('data/'+n+'.json').catch(function(){return {rows:[],error:true}}).then(function(x){x.__key=n;return x})})).then(function(arr){
-      var out={};arr.forEach(function(x){out[x.__key]=x});return out;
-    });
-  }
+  function loadBoards(){return Promise.resolve(OWN_BOARDS||{})}
   function drawGame(draw,rule){return (draw.games||[]).filter(function(g){return g.rule===rule||(rule==='Macau'&&g.name==='新澳彩')||(rule==='HongKong'&&g.name==='香港彩')})[0]||null}
   function viewFromDraw(g,name,key,cfg,now){if(!g)return null;var nums=norm(g.nums),hist=(g.history||[]).slice().map(function(h){return {issue:h.issue,nums:norm(h.nums)}}).sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});var cur=hist[0];if(!nums.length&&cur&&cur.nums&&cur.nums.length)nums=cur.nums;var display=cur||{issue:g.issue,nums:nums};var issue=parseInt(g.issue,10)||parseInt(display.issue,10)||0;if(!nums.length&&display&&display.nums)nums=norm(display.nums);var t=cfg.drawTimes[key]||{};var next=nextAt(t.time,t.days,now);return {key:key,name:name,issue:issue,currentIssue:issue,nums:nums.length?nums:norm(display.nums),history:hist,state:nums.length?'已开奖':'待开奖',nextTime:next,nextIssue:issue+1,drawTime:t.time}}
   function build(d){
