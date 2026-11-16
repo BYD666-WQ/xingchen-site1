@@ -19,6 +19,7 @@
     <div class="num-row" id="numRow"></div>
     <div class="refresh-cell" id="refreshBtn"><em>↻</em>刷新<br>记录</div>
   </div>
+  <div id="revealStatus" class="reveal-status" hidden></div>
   <div class="channels" id="channels">
     <a class="ch xg on" data-k="newhk" href="#"><span class="flag">港</span>新港</a>
     <a class="ch am" data-k="newmo" href="#"><span class="flag">澳</span>新澳</a>
@@ -36,7 +37,7 @@
   <div id="extraData"><div class="board-empty">新增资料读取中…</div></div>
   <div id="moreData"><div class="new-empty">更多资料读取中…</div></div>
   <div class="bigline"><span class="big">彩霸王</span><span class="txt">开奖<i>快</i>人一步</span><span class="badge">资料站</span></div>
-  <div id="histWrap"><div class="hist-head" id="histHead">近期开奖 · 加载中</div><div class="hist" id="hist"></div></div>
+  <div id="histWrap"><div class="hist-head" id="histHead">近期开奖 · 加载中</div><div class="hist" id="hist"></div><button class="hist-more" id="histMore" type="button">展开全部</button></div>
   <div id="poemWrap" class="poem"><div class="poem-hd"><b>玄机诗象</b> · 本期观点</div><p>龙争虎斗，马到成功；<br><span>留意单数生肖</span>，<em>特码看虎马羊</em>。</p></div>
   <div id="zodWrap"><div class="zod-head">生肖号码对照 · <b>2026 丙午</b> · 点击查看</div><div class="zod-grid" id="zodGrid"></div></div>
   <div class="hot-head">本期精选 · 数据更新 <span><a href="data.html" style="color:#ffe600">全部 ›</a></span></div>
@@ -47,7 +48,7 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  var DATA=null,CUR='newhk',timer=null;
+  var DATA=null,CUR='newhk',timer=null,REVEAL=null,REVEAL_CFG=null,revealTimers=[],waitPoll=null,HIST_OPEN=false,HIST_LIMIT=5;
   var BOARDS=[
     ['本期资料','内幕/精选'],['历史开奖','往期归档'],['玄机诗象','本期观点'],
     ['生肖号码','号码对照'],['资料大全','全部资料'],['图库','图集'],
@@ -58,16 +59,98 @@
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function view(k){return DATA&&DATA.games&&DATA.games[k]}
   function setLoading(txt,err){var e=document.getElementById('loading');if(!e)return;e.textContent=txt;e.className='loading'+(err?' err':'');if(!txt)e.style.display='none'}
-  function renderBalls(v){
-    document.getElementById('issueTop').textContent=XC.fmtIssue(v.issue||v.currentIssue);
-    var nums=v.nums||[];
-    var head=nums.slice(0,6).map(function(x){return '<div class="nc '+XC.numClass(x.c)+'"><b>'+esc(x.c)+'</b><i>'+esc(x.z)+'</i></div>'}).join('');
-    var sp=nums[6]?('<span class="plus-sep">+</span><div class="nc '+XC.numClass(nums[6].c)+'"><b>'+esc(nums[6].c)+'</b><i>'+esc(nums[6].z)+'</i></div>'):'';
-    document.getElementById('numRow').innerHTML=head+sp;
+  function renderBalls(v,numsOverride,revealed,phase,issueOverride){
+    var nums=numsOverride||(v&&v.nums)||[];
+    var issue=issueOverride||(v&&(v.issue||v.currentIssue));
+    document.getElementById('issueTop').textContent=XC.fmtIssue(issue);
+    var show=(phase==='waiting')?0:(phase==='revealing'?(revealed||0):nums.length);
+    var h='';
+    for(var i=0;i<7;i++){
+      if(i===6)h+='<span class="plus-sep">+</span>';
+      if(i<show&&nums[i]&&nums[i].c){h+='<div class="nc '+XC.numClass(nums[i].c)+'"><b>'+esc(nums[i].c)+'</b><i>'+esc(nums[i].z)+'</i></div>'}
+      else{h+='<div class="nc pending"><b>?</b><i>?</i></div>'}
+    }
+    document.getElementById('numRow').innerHTML=h;
+  }
+  function revealCfg(){var c=null;try{c=DATA&&DATA.config&&DATA.config.reveal}catch(e){};var o={mode:'fixed',seconds:10,min:8,max:15,specialExtra:5};if(c){if(c.mode==='random'||c.mode==='fixed')o.mode=c.mode;if(isFinite(c.seconds))o.seconds=Math.max(1,Math.min(120,+c.seconds));if(isFinite(c.min))o.min=Math.max(1,Math.min(120,+c.min));if(isFinite(c.max))o.max=Math.max(1,Math.min(120,+c.max));if(isFinite(c.specialExtra))o.specialExtra=Math.max(0,Math.min(120,+c.specialExtra))}return o}
+  function rngSeed(s){var h=2166136261;for(var i=0;i<String(s).length;i++){h^=String(s).charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+  function rng(seed){var s=seed>>>0||1;return function(){s=(s+0x6D2B79F5)>>>0;var t=s;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
+  function revealTimeline(issue){var c=REVEAL_CFG||revealCfg(),out=[],t=1500;out.push(t);var r=c.mode==='random'?rng(rngSeed('v'+issue)):null;for(var i=1;i<=6;i++){var gap=c.mode==='random'?(c.min+Math.floor(r()*(c.max-c.min+1))):c.seconds;t+=gap*1000;if(i===6)t+=(c.specialExtra||0)*1000;out.push(t)}return out}
+  function clearRevealTimers(){revealTimers.forEach(function(x){clearTimeout(x)});revealTimers=[]}
+  function revealStatus(txt){var e=document.getElementById('revealStatus');if(!e)return;e.hidden=!txt;e.textContent=txt||''}
+  function localDone(issue){try{var s=JSON.parse(localStorage.getItem('xc-site1-vf-'+XC.short(issue))||'null');return !!(s&&String(s.issue)===String(issue)&&s.nums&&s.nums.length===7)}catch(e){return false}}
+  function saveDone(issue,nums){try{localStorage.setItem('xc-site1-vf-'+XC.short(issue),JSON.stringify({issue:issue,nums:nums}))}catch(e){}}
+  function startReveal(issue,nums){
+    clearRevealTimers();if(waitPoll){clearTimeout(waitPoll);waitPoll=null}
+    REVEAL_CFG=revealCfg();var tl=revealTimeline(issue);
+    REVEAL={phase:'revealing',issue:issue,nums:nums,revealed:0,start:Date.now(),tl:tl};
+    renderBalls(null,nums,0,'revealing',issue);revealStatus('开奖中… 0/7');
+    tl.forEach(function(ms,i){revealTimers.push(setTimeout(function(){
+      if(!REVEAL||REVEAL.phase!=='revealing'||String(REVEAL.issue)!==String(issue))return;
+      REVEAL.revealed=i+1;renderBalls(null,nums,REVEAL.revealed,'revealing',issue);revealStatus('开奖中… '+(i+1)+'/7');
+      if(i===6)revealTimers.push(setTimeout(function(){finishReveal(issue,nums)},1200));
+    },ms))});
+  }
+  function finishReveal(issue,nums){
+    if(!REVEAL||String(REVEAL.issue)!==String(issue))return;
+    clearRevealTimers();REVEAL.phase='done';revealStatus('');
+    var v=view('newhk');if(v){
+      v.issue=parseInt(issue,10)||v.issue;v.currentIssue=v.issue;v.nums=nums;v.state='已开奖';
+      var hist=(v.history||[]).filter(function(h){return String(h.issue)!==String(issue)});
+      hist.unshift({issue:issue,nums:nums});v.history=hist;
+      v.nextIssue=(parseInt(issue,10)||0)+1;
+      var t=(DATA.config.drawTimes.newhk||{});v.nextTime=XC.nextAt(t.time,t.days,new Date());
+      renderBalls(v,nums,7,'done',issue);renderHistory(v);
+      document.getElementById('zodNow').textContent='当前：'+v.name+' · '+XC.fmtIssue(v.issue);
+      saveDone(issue,nums);tick();
+    }
+  }
+  function startWaiting(issue){
+    clearRevealTimers();if(waitPoll){clearTimeout(waitPoll);waitPoll=null}
+    REVEAL={phase:'waiting',issue:issue,nums:[],revealed:0,start:Date.now()};
+    renderBalls(null,[],0,'waiting',issue);revealStatus('开奖中… 0/7');
+    waitPoll=setTimeout(function(){waitPoll=null;load()},10000);
+  }
+  function issueDraw(issue){
+    var md=DATA&&DATA.manualRaw;if(!md)return null;
+    var want=String(issue);
+    var curIssue=parseInt(md.issue,10)||0;
+    var candidates=[];
+    if(String(curIssue)===want)candidates.push({issue:curIssue,nums:md.nums,numsEnc:md.numsEnc,publishedAt:md.publishedAt,visibleFrom:md.visibleFrom});
+    (md.history||[]).forEach(function(h){if(String(h.issue)===want)candidates.push({issue:h.issue,nums:h.nums,numsEnc:h.numsEnc,publishedAt:h.publishedAt,visibleFrom:h.visibleFrom})});
+    for(var j=0;j<candidates.length;j++){
+      var x=candidates[j],nums=XC.norm(x.nums||[]);
+      if(!nums.length&&x.numsEnc){try{var dec=XC.norm(XC.vfDec(x.numsEnc));if(dec&&dec.length===7)nums=dec}catch(e){}}
+      if(nums.length===7){
+        var pub=Date.parse(x.publishedAt||''),vis=Date.parse(x.visibleFrom||'');
+        var visible=(!isFinite(pub)&&!isFinite(vis))||(isFinite(pub)&&pub<=Date.now())||(isFinite(vis)&&vis<=Date.now());
+        return {issue:parseInt(issue,10)||0,nums:nums,visible:visible,when:Math.max(isFinite(pub)?pub:0,isFinite(vis)?vis:0)};
+      }
+    }
+    return null;
+  }
+  function currentDrawData(){
+    var md=DATA&&DATA.manualRaw;if(!md)return null;
+    return issueDraw(md.issue)||{issue:parseInt(md.issue,10)||0,nums:[]};
+  }
+  function maybeReveal(freshOnly){
+    if(CUR!=='newhk')return false;
+    var target=(REVEAL&&REVEAL.phase==='waiting')?REVEAL.issue:null;
+    var c=target?issueDraw(target):currentDrawData();
+    if(!c||!c.visible||c.nums.length!==7)return false;
+    if(freshOnly&&(!c.when||Date.now()-c.when>10*60*1000))return false;
+    if(localDone(c.issue))return false;
+    if(REVEAL&&String(REVEAL.issue)===String(c.issue)&&(REVEAL.phase==='revealing'||REVEAL.phase==='done'))return false;
+    startReveal(c.issue,c.nums);return true;
   }
   function tick(){
     if(!DATA)return;var v=view(CUR);if(!v)return;
+    if(CUR==='newhk'&&REVEAL&&(REVEAL.phase==='waiting'||REVEAL.phase==='revealing')){
+      document.getElementById('h').textContent='00';document.getElementById('m').textContent='00';document.getElementById('s').textContent='00';
+      document.getElementById('nextIssueLabel').textContent='第'+XC.short(REVEAL.issue)+'期';return;
+    }
     var target=v.nextTime?new Date(v.nextTime):null;var s=target?Math.max(0,Math.floor((target-new Date())/1000)):0;
+    if(CUR==='newhk'&&!REVEAL&&s<=0&&v.pendingIssue){if(!maybeReveal())startWaiting(v.pendingIssue)}
     var hh=Math.floor(s/3600),mm=Math.floor(s%3600/60),ss=s%60;
     document.getElementById('h').textContent=XC.p2(hh);document.getElementById('m').textContent=XC.p2(mm);document.getElementById('s').textContent=XC.p2(ss);
     document.getElementById('nextIssueLabel').textContent='第'+XC.short(v.nextIssue||'')+'期';
@@ -78,8 +161,13 @@
     document.getElementById('boards').innerHTML=BOARDS.map(function(b,i){return '<a class="g3" href="'+(i===0?'data.html#pick':(i===1?'#histWrap':(i===2?'#poemWrap':(i===3?'#zodWrap':(i===4?'data.html':(i===5?'gallery.html':(i===6?'trends.html':'#')))))))+'">'+(i+1)+'、'+b[0]+'<small>'+b[1]+'</small></a>'}).join('');
   }
   function renderHistory(v){
-    var hist=(v.history||[]).slice().sort(function(a,b){return (parseInt(a.issue,10)||0)-(parseInt(b.issue,10)||0)}).slice(-4);document.getElementById('histHead').textContent='近期开奖 · '+XC.fmtIssue(v.issue)+' 已更新';
-    document.getElementById('hist').innerHTML=hist.length?hist.map(function(h){var nums=XC.norm(h.nums);var sp=nums[6]||{};var n=nums.slice(0,6).map(function(x){return '<span class="'+XC.numClass(x.c)+'">'+esc(x.c)+'</span>'}).join(' ');return '<div class="hrow">'+XC.histLine(h)+'<span class="sub">本期看点:【<em>生肖 '+esc(sp.z||'')+'</em>】 重点:【<u>冷热对照</u>】</span></div>'}).join(''):'<div class="empty">暂无历史数据</div>';
+    var all=(v.history||[]).slice().sort(function(a,b){return (parseInt(a.issue,10)||0)-(parseInt(b.issue,10)||0)});
+    var hist=HIST_OPEN?all:all.slice(-HIST_LIMIT);
+    document.getElementById('histHead').textContent='近期开奖 · '+XC.fmtIssue(v.issue)+' 已更新 · 共 '+all.length+' 期';
+    document.getElementById('hist').innerHTML=hist.length?hist.map(function(h){var nums=XC.norm(h.nums);var sp=nums[6]||{};return '<div class="hrow">'+XC.histLine(h)+'<span class="sub">本期看点:【<em>生肖 '+esc(sp.z||'')+'</em>】 重点:【<u>冷热对照</u>】</span></div>'}).join(''):'<div class="empty">暂无历史数据</div>';
+    var btn=document.getElementById('histMore');if(!btn)return;
+    btn.hidden=all.length<=HIST_LIMIT;
+    btn.textContent=HIST_OPEN?('收起 · 只显示近'+HIST_LIMIT+'期'):('展开全部 '+all.length+' 期');
   }
   function renderHot(){
     var pick=(DATA.pick&&DATA.pick.rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});
@@ -283,17 +371,18 @@
     document.getElementById('zodGrid').innerHTML=ZODIAC.map(function(z){var nums=(map[z]||[]).sort(function(a,b){return parseInt(a,10)-parseInt(b,10)});return '<div class="zcell"><b>'+z+'</b><span>'+(nums.length?nums.join(' '):ZN[z])+'</span></div>'}).join('');
   }
   function renderAll(){
-    var v=view(CUR);if(!v)return;renderBalls(v);renderHistory(v);setActiveTab();tick();
+    var v=view(CUR);if(!v)return;if(CUR==='newhk'&&REVEAL&&REVEAL.phase==='revealing'){renderBalls(null,REVEAL.nums,REVEAL.revealed,'revealing',REVEAL.issue);revealStatus('开奖中… '+REVEAL.revealed+'/7')}else if(CUR==='newhk'&&REVEAL&&REVEAL.phase==='waiting'){renderBalls(null,[],0,'waiting',REVEAL.issue)}else{renderBalls(v)}renderHistory(v);setActiveTab();tick();
     document.getElementById('todayText').textContent='今：'+XC.fmtDate(new Date())+' · 资料更新';
     document.getElementById('zodNow').textContent='当前：'+v.name+' · '+XC.fmtIssue(v.issue);
     document.getElementById('marqueeText').innerHTML='彩霸王 · 开奖数据每日更新 · 资料仅供参考 &nbsp;<b>开奖直播</b> <i>历史归档</i> <u>生肖玄机</u> <em>图库精选</em>';
     renderBoardData();
     renderExtraBlocks();renderMoreBlocks();
   }
-  function switchGame(k){if(!view(k))return;CUR=k;renderAll();renderBoardData();renderExtraBlocks();renderMoreBlocks()}
+  function switchGame(k){if(!view(k))return;if(k!=='newhk'){clearRevealTimers();if(waitPoll){clearTimeout(waitPoll);waitPoll=null}REVEAL=null;revealStatus('')}CUR=k;HIST_OPEN=false;renderAll();renderBoardData();renderExtraBlocks();renderMoreBlocks()}
   document.getElementById('channels').addEventListener('click',function(e){var a=e.target.closest('[data-k]');if(!a)return;e.preventDefault();switchGame(a.getAttribute('data-k'))});
+  document.getElementById('histMore').addEventListener('click',function(){HIST_OPEN=!HIST_OPEN;renderHistory(view(CUR))});
   document.getElementById('refreshBtn').addEventListener('click',function(){load()});
-  function load(){setLoading('数据读取中…');XC.load().then(function(d){DATA=d;var _maps=buildSpecialMap();SPMAP=_maps.sp;DRAWMAP=_maps.all;COLORMAP=buildColorMap();document.getElementById('loading').style.display='none';renderAll();renderHot();renderPoem();renderZodiac();startTick();return XC.loadBoards()}).then(function(b){BDL=b||{};renderBoardData();renderExtraBlocks();renderMoreBlocks()}).catch(function(e){setLoading('数据读取失败，请稍后刷新',true);console.error(e)})}
+  function load(){setLoading('数据读取中…');var _wasWaiting=!!(REVEAL&&REVEAL.phase==='waiting');XC.load().then(function(d){DATA=d;var _maps=buildSpecialMap();SPMAP=_maps.sp;DRAWMAP=_maps.all;COLORMAP=buildColorMap();document.getElementById('loading').style.display='none';renderAll();renderHot();renderPoem();renderZodiac();startTick();if(_wasWaiting)maybeReveal(false);else maybeReveal(true);return XC.loadBoards()}).then(function(b){BDL=b||{};renderBoardData();renderExtraBlocks();renderMoreBlocks()}).catch(function(e){setLoading('数据读取失败，请稍后刷新',true);console.error(e)})}
   renderBoards();document.getElementById('zodGrid').innerHTML=ZODIAC.map(function(z){return '<div class="zcell"><b>'+z+'</b><span>'+ZN[z]+'</span></div>'}).join('');load();
 })();
 </script>

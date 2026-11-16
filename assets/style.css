@@ -373,3 +373,13 @@ body{font-size:15px}
 .attr-cell{border:1px solid #d9a845;background:#fffdf6;padding:4px 2px;text-align:center;min-width:0}
 .attr-cell b{display:block;color:#d40000;font-size:14px;font-weight:900}.attr-cell span{display:block;color:#6b4a10;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
 .full-note{padding:6px 8px;font-size:12px;color:#4a2a00;line-height:1.6;background:#fff7d7;border-bottom:1px dotted #e0cfa8}
+
+/* 开奖揭晓状态/问号球 */
+.reveal-status{margin:4px;padding:6px 8px;border:1px dashed #ffe600;border-radius:4px;background:#230018;color:#ffe600;font-size:13px;font-weight:900;text-align:center;letter-spacing:.03em}
+.reveal-status[hidden]{display:none}
+.draw-strip .num-row .nc.pending{background:#2b1730!important;border-color:#7c5b24!important;color:#ffe600!important}
+.draw-strip .num-row .nc.pending b{color:#ffe600!important;font-size:24px;line-height:1}
+.draw-strip .num-row .nc.pending i{color:#d8b45a!important}
+.hist-more{display:block;width:calc(100% - 10px);margin:5px;padding:7px 8px;border:1px solid #d40000;border-radius:4px;background:#fff6df;color:#b00000;font-size:14px;font-weight:900;cursor:pointer}
+.hist-more:active{background:#ffe600}
+.hist-more[hidden]{display:none}

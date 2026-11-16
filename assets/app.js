@@ -43,15 +43,20 @@
     });
   }
   function drawGame(draw,rule){return (draw.games||[]).filter(function(g){return g.rule===rule||(rule==='Macau'&&g.name==='新澳彩')||(rule==='HongKong'&&g.name==='香港彩')})[0]||null}
-  function viewFromDraw(g,name,key,cfg,now){if(!g)return null;var nums=norm(g.nums),hist=(g.history||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});var cur=hist[0];var display=cur||{issue:g.issue,nums:nums};var issue=parseInt(g.issue,10)||parseInt(display.issue,10)||0;if(!nums.length&&cur)nums=norm(cur.nums);var t=cfg.drawTimes[key]||{};var next=nextAt(t.time,t.days,now);return {key:key,name:name,issue:issue,currentIssue:issue,nums:nums.length?nums:norm(display.nums),history:hist,state:nums.length?'已开奖':'待开奖',nextTime:next,nextIssue:issue+1,drawTime:t.time}}
+  function viewFromDraw(g,name,key,cfg,now){if(!g)return null;var nums=norm(g.nums),hist=(g.history||[]).slice().map(function(h){return {issue:h.issue,nums:norm(h.nums)}}).sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});var cur=hist[0];if(!nums.length&&cur&&cur.nums&&cur.nums.length)nums=cur.nums;var display=cur||{issue:g.issue,nums:nums};var issue=parseInt(g.issue,10)||parseInt(display.issue,10)||0;if(!nums.length&&display&&display.nums)nums=norm(display.nums);var t=cfg.drawTimes[key]||{};var next=nextAt(t.time,t.days,now);return {key:key,name:name,issue:issue,currentIssue:issue,nums:nums.length?nums:norm(display.nums),history:hist,state:nums.length?'已开奖':'待开奖',nextTime:next,nextIssue:issue+1,drawTime:t.time}}
   function build(d){
     var now=new Date(),cfg=d.config,md=d.manualRaw;
     // 新港：manual-draw；到点后解密 numsEnc，未到点回退到 history[0]
-    var hn=norm(md.nums),curIssue=parseInt(md.issue,10)||0,hist=(md.history||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});
-    if(!hn.length&&md.numsEnc&&isVisible(md,now.getTime())){hn=norm(vfDec(md.numsEnc))}
+    var hn=norm(md.nums),curIssue=parseInt(md.issue,10)||0,hist=(md.history||[]).slice().map(function(h){var a=norm(h.nums);if(!a.length&&h.numsEnc)try{a=norm(vfDec(h.numsEnc))}catch(e){}return {issue:h.issue,nums:a,visibleFrom:h.visibleFrom,publishedAt:h.publishedAt}}).sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});
+    if(!hn.length&&md.numsEnc){var _dec=null;try{_dec=norm(vfDec(md.numsEnc))}catch(e){}if(_dec&&_dec.length===7&&isVisible(md,now.getTime()))hn=_dec}
     var hkView={key:'newhk',name:'新港',issue:curIssue,currentIssue:curIssue,nums:hn,history:hist,state:hn.length?'已开奖':'待开奖',drawTime:(cfg.drawTimes.newhk||{}).time||'21:34'};
     if(!hkView.nums.length&&hist[0]){hkView.issue=parseInt(hist[0].issue,10)||curIssue;hkView.nums=norm(hist[0].nums);hkView.state='上期开奖'}
-    var visible=Date.parse(md.visibleFrom||'');var nextSched=nextAt(hkView.drawTime,(cfg.drawTimes.newhk||{}).days,now);hkView.nextTime=(!hn.length&&isFinite(visible)&&visible>now.getTime())?new Date(visible):nextSched;hkView.nextIssue=(curIssue||hkView.issue)+1;
+    var visible=Date.parse(md.visibleFrom||'');var nextSched=nextAt(hkView.drawTime,(cfg.drawTimes.newhk||{}).days,now);
+    var _pending=!hn.length&&curIssue&&curIssue>parseInt(hkView.issue,10);
+    hkView.pendingIssue=_pending?curIssue:null;
+    hkView.nextIssue=_pending?curIssue:((parseInt(hkView.issue,10)||curIssue)+1);
+    hkView.nextTime=(_pending&&isFinite(visible))?new Date(visible):nextSched;
+    hkView.currentIssue=curIssue;
     var newmo=drawGame(d.draw,'Macau'),hk=drawGame(d.draw,'HongKong');
     return {newhk:hkView,newmo:viewFromDraw(newmo,'新澳','newmo',cfg,now),hk:viewFromDraw(hk,'香港','hk',cfg,now)};
   }
