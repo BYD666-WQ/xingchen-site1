@@ -383,3 +383,40 @@ body{font-size:15px}
 .hist-more{display:block;width:calc(100% - 10px);margin:5px;padding:7px 8px;border:1px solid #d40000;border-radius:4px;background:#fff6df;color:#b00000;font-size:14px;font-weight:900;cursor:pointer}
 .hist-more:active{background:#ffe600}
 .hist-more[hidden]{display:none}
+
+/* ===== 彩霸王 10 块 ===== */
+#tenBlocks{padding:0 0 2px}
+.ten-block{margin:5px 4px;border:2px solid #d40000;border-radius:4px;overflow:hidden;background:#fff}
+.ten-lx-row{display:grid;grid-template-columns:43px 1fr 78px;gap:3px;align-items:center;padding:5px;border-top:1px solid #ead8ad}
+.ten-lx-row:first-of-type{border-top:0}
+.ten-iss{flex:0 0 43px;color:#d40000;font-family:"Arial Black",Arial,sans-serif;font-size:13px;font-weight:900;white-space:nowrap}
+.ten-pairs{min-width:0;font-size:14px;font-weight:800;line-height:1.55;color:#6b1b00}
+.ten-pairs>span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ten-pairs .ten-pi{display:inline!important;white-space:nowrap;overflow:visible;text-overflow:clip}
+.ten-row{display:flex;align-items:center;gap:3px;padding:5px 5px;border-top:1px solid #ead8ad;font-size:14px;font-weight:800;color:#4a2a00;min-width:0}
+.ten-row:first-of-type{border-top:0}
+.ten-row .ten-iss{flex:0 0 43px}
+.ten-mid{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ten-res{flex:0 0 auto;text-align:right;font-size:13px;white-space:nowrap;font-weight:900}
+.ten-hi{background:#ffe600;color:#b00000;padding:1px 3px;border-radius:2px}
+.ten-hit{background:#ffe600;color:#b00000!important;border-radius:2px;padding:0 1px;font-weight:900}
+.ten-ok{color:#007a2e}.ten-no{color:#999}
+.wave-red{color:#d40000}.wave-blue{color:#003ecb}.wave-green{color:#007a2e}
+.ten-note{background:#00c400;color:#003b00;font-size:13px;font-weight:900;text-align:center;line-height:1.6;padding:4px 5px}
+.ten-demo{color:#ff9edb!important;font-weight:700}
+.ten-nine{padding:5px 6px;border-top:1px solid #ead8ad}
+.ten-nine:first-of-type{border-top:0}
+.ten-l1{font-size:14px;font-weight:800;color:#4a2a00;line-height:1.45}
+.ten-l2{font-size:14px;font-weight:900;color:#d40000;line-height:1.7;white-space:normal}
+.ten-pickcard{border-top:2px solid #003ecb}
+.ten-pickcard:first-of-type{border-top:0}
+.ten-blue{background:linear-gradient(90deg,#003ecb,#004b9b);color:#fff;font-size:15px;font-weight:900;text-align:center;padding:5px 4px;letter-spacing:.02em}
+.ten-ph{text-align:center;font-size:14px;font-weight:900;color:#003ecb;background:#fff;padding:5px 3px;line-height:1.5}
+.ten-ph b{color:#b00000}
+.ten-pkrow{display:grid;grid-template-columns:40px 1fr 38px 1fr;gap:3px;align-items:start;padding:4px 4px;border-top:1px dotted #d8c08b;font-size:14px;font-weight:900;color:#d40000}
+.ten-pl{color:#003ecb;font-size:12px;white-space:nowrap}
+.ten-pz,.ten-pn{min-width:0;white-space:normal;overflow:hidden;line-height:1.5}
+.ten-head{font-weight:900;padding:0 1px}.ten-head.r{color:#d40000}.ten-head.g{color:#007a2e}
+.ten-tail{padding:5px 6px;border-top:1px solid #ead8ad;font-size:14px;line-height:1.55;color:#003ecb;font-weight:900}
+.ten-tail:first-of-type{border-top:0}
+.ten-tail-h{text-align:center;font-size:15px;color:#003ecb;margin-bottom:3px}
+.ten-tail-l{white-space:normal;overflow-wrap:anywhere;color:#4a2a00;margin-top:2px}
