@@ -325,13 +325,6 @@
       return '<div class="pick-card"><div class="pick-head">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div><div class="pick-wm">资料展示 · 占位水印</div><div class="pick-body">'+body+'</div></div>';
     }).join('')||'<div class="new-empty">暂无精选资料</div>';
     out+='<section class="new-block"><div class="new-hd">一肖一码 <span>精选 · 按实际开奖对照</span></div>'+pickHtml+'</section>';
-    var known=['liuxiao','jiaye','shuangbo','danshuang','jiuxiao','ersha','pick','santou','qiwei','liangbo'];
-    var secs=(DATA.siteData&&DATA.siteData.sections)||[];
-    secs.forEach(function(s){
-      if(known.indexOf(s.id)>=0||s.type==='poem'||s.type==='attrs'||s.type==='ziliao')return;
-      var rs=(s.rows||[]).map(function(r){var mid=r.text||r.note||'';if(!mid){var z=r.zodiacs||r.pair||r.waves||r.heads||r.tails||[];if(Array.isArray(z))z=z.join('');if(r.list&&r.list.length){z=r.list.map(function(x){return x.z+x.c}).join(' ')}mid=(z||'')+(r.nums&&Array.isArray(r.nums)?' '+r.nums.join(' '):(r.nums||''));if(r.special&&r.special.z)mid+=' 开:'+r.special.z+(r.special.c||'');}return '<div class="ten-row"><span class="ten-iss">'+esc(r.issue||'')+'期</span><span class="ten-mid">'+esc(mid)+'</span></div>'}).join('');
-      out+=tenSection(s.title||s.id,rs||'<div class="new-empty">暂无资料</div>',s.note||'',s.id);
-    });
     el.innerHTML=out;
     var ids={};secs.forEach(function(s){ids[s.id]=1});
     Array.prototype.slice.call(el.children).forEach(function(c){var k=c.getAttribute('data-sec');if(k&&!ids[k])c.parentNode.removeChild(c)});
@@ -452,6 +445,13 @@
     // 10 两波中特
     var s2=sb.map(function(r){var sp=spOf(r),ws=r.waves||[],col=sp?colorOf(sp.c):'',hit=ws.indexOf(col)>=0;var wh=ws.map(function(w){return '<span class="ten-hit'+(w===col?' ten-wave':'')+'">'+esc(w)+'波</span>'}).join('');return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">两波中特 <span class="ten-hi">【'+wh+'】</span></span><span class="ten-res">特开:'+esc(sp.z)+'<span class="wave-'+waveClass(sp.c)+'">+'+esc(sp.c)+'</span> <b class="'+(hit?'ten-ok':'ten-no')+'">'+(hit?'准':'错')+'</b></span></div>'}).join('');
     out+=tenSection('两波中特',s2||'<div class="new-empty">暂无两波资料</div>','','liangbo');
+    var known=['liuxiao','jiaye','shuangbo','danshuang','jiuxiao','ersha','pick','santou','qiwei','liangbo','wuxiao'];
+    var secs=(DATA.siteData&&DATA.siteData.sections)||[];
+    secs.forEach(function(s){
+      if(known.indexOf(s.id)>=0||s.type==='poem'||s.type==='attrs'||s.type==='ziliao')return;
+      var rs=(s.rows||[]).map(function(r){var mid=r.text||r.note||'';if(!mid){var z=r.zodiacs||r.pair||r.waves||r.heads||r.tails||[];if(Array.isArray(z))z=z.join('');if(r.list&&r.list.length){z=r.list.map(function(x){return x.z+x.c}).join(' ')}mid=(z||'')+(r.nums&&Array.isArray(r.nums)?' '+r.nums.join(' '):(r.nums||''));if(r.special&&r.special.z)mid+=' 开:'+r.special.z+(r.special.c||'');}return '<div class="ten-row"><span class="ten-iss">'+esc(r.issue||'')+'期</span><span class="ten-mid">'+esc(mid)+'</span></div>'}).join('');
+      out+=tenSection(s.title||s.id,rs||'<div class="new-empty">暂无资料</div>',s.note||'',s.id);
+    });
     el.innerHTML=out;
   }
   function renderAll(){
