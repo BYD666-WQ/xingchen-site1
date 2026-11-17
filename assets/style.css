@@ -424,3 +424,5 @@ body{font-size:15px}
 html{overflow-x:hidden;max-width:100%}
 body{max-width:100%;overflow-x:hidden}
 #tenBlocks{max-width:100%;overflow:hidden}
+
+.ten-wait{color:#d40000;font-weight:900;font-size:12px;background:#fff;padding:0 2px;border-radius:2px;border:1px solid #d40000}
