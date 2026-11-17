@@ -17,7 +17,7 @@
   <div class="draw-strip">
     <div class="issue-cell"><b id="issueTop">---期</b><span>开奖</span></div>
     <div class="num-row" id="numRow"></div>
-    <div class="refresh-cell" id="refreshBtn"><em>↻</em>刷新<br>记录</div>
+    <div class="refresh-cell" id="refreshBtn" role="button" tabindex="0" aria-label="刷新数据"><em>↻</em>刷新<br>记录</div>
   </div>
   <div id="revealStatus" class="reveal-status" hidden></div>
   <div class="channels" id="channels">
@@ -452,7 +452,7 @@
   function switchGame(k){if(!view(k))return;if(k!=='newhk'){clearRevealTimers();if(waitPoll){clearTimeout(waitPoll);waitPoll=null}REVEAL=null;revealStatus('')}CUR=k;HIST_OPEN=false;renderAll();renderTenBlocks();renderMoreBlocks()}
   document.getElementById('channels').addEventListener('click',function(e){var a=e.target.closest('[data-k]');if(!a)return;e.preventDefault();switchGame(a.getAttribute('data-k'))});
   document.getElementById('histMore').addEventListener('click',function(){HIST_OPEN=!HIST_OPEN;renderHistory(view(CUR))});
-  document.getElementById('refreshBtn').addEventListener('click',function(){load()});
+  var _rf=document.getElementById('refreshBtn');_rf.addEventListener('click',function(){load()});_rf.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();load()}});
   function setRefreshBusy(on){var el=document.getElementById('refreshBtn');if(!el)return;if(on){el.classList.add('busy');el.innerHTML='<i class="rf-spin"></i>刷新中…'}else{el.classList.remove('busy');el.innerHTML='<em>↻</em>刷新<br>记录'}}
   function load(){
     if(REFRESHING)return;REFRESHING=true;setRefreshBusy(true);
@@ -463,11 +463,12 @@
 })();
 </script>
 <style id="refresh-busy-style">
-.refresh-cell{min-height:44px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.refresh-cell{min-height:44px;min-width:44px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .refresh-cell.busy{opacity:.8;pointer-events:none}
 .refresh-cell .rf-spin{width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;display:inline-block;animation:rfSpin .7s linear infinite;margin-bottom:2px}
 @keyframes rfSpin{to{transform:rotate(360deg)}}
-.quick a{min-height:40px;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
+.quick a{min-height:44px;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
+.channels .ch{min-height:44px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .bottom-nav a{min-height:44px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center}
 @media(prefers-reduced-motion:reduce){.refresh-cell .rf-spin{animation:none}}
 </style>
