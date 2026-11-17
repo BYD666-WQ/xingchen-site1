@@ -1,6 +1,6 @@
 {
  "name": "彩霸王资料",
- "updated": "2026-11-17T16:41:07.470Z",
+ "updated": "2026-11-17T19:08:24.685Z",
  "sections": [
   {
    "id": "liuxiao",
@@ -1378,6 +1378,16 @@
      ],
      "special": null,
      "result": ""
+    },
+    {
+     "issue": "322",
+     "list": [],
+     "special": null,
+     "result": "",
+     "waves": [
+      "红",
+      "绿"
+     ]
     }
    ]
   },
