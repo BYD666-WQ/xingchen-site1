@@ -1,6 +1,6 @@
 {
  "name": "彩霸王资料",
- "updated": "2026-11-17T19:09:56.252Z",
+ "updated": "2026-11-18T03:37:32.403Z",
  "sections": [
   {
    "id": "liuxiao",
@@ -494,10 +494,10 @@
    "id": "danshuang",
    "title": "单双",
    "type": "oddeven",
-   "note": "",
+   "note": "单数",
    "rows": [
     {
-     "issue": 313,
+     "issue": "313",
      "oddEven": "双数",
      "zodiacs": [
       "马",
@@ -506,11 +506,13 @@
      ],
      "special": {
       "z": "马",
-      "c": "13"
-     }
+      "c": "13",
+      "color": ""
+     },
+     "result": ""
     },
     {
-     "issue": 314,
+     "issue": "314",
      "oddEven": "单数",
      "zodiacs": [
       "鸡",
@@ -519,11 +521,13 @@
      ],
      "special": {
       "z": "鸡",
-      "c": "46"
-     }
+      "c": "46",
+      "color": ""
+     },
+     "result": ""
     },
     {
-     "issue": 315,
+     "issue": "315",
      "oddEven": "双数",
      "zodiacs": [
       "狗",
@@ -532,11 +536,13 @@
      ],
      "special": {
       "z": "牛",
-      "c": "06"
-     }
+      "c": "06",
+      "color": ""
+     },
+     "result": ""
     },
     {
-     "issue": 316,
+     "issue": "316",
      "oddEven": "双数",
      "zodiacs": [
       "猴",
@@ -545,11 +551,13 @@
      ],
      "special": {
       "z": "虎",
-      "c": "29"
-     }
+      "c": "29",
+      "color": ""
+     },
+     "result": ""
     },
     {
-     "issue": 317,
+     "issue": "317",
      "oddEven": "单数",
      "zodiacs": [
       "鸡",
@@ -558,11 +566,13 @@
      ],
      "special": {
       "z": "马",
-      "c": "13"
-     }
+      "c": "13",
+      "color": ""
+     },
+     "result": ""
     },
     {
-     "issue": 318,
+     "issue": "318",
      "oddEven": "单数",
      "zodiacs": [
       "鸡",
@@ -571,11 +581,13 @@
      ],
      "special": {
       "z": "龙",
-      "c": "27"
-     }
+      "c": "27",
+      "color": ""
+     },
+     "result": ""
     },
     {
-     "issue": 319,
+     "issue": "319",
      "oddEven": "单数",
      "zodiacs": [
       "鸡",
@@ -584,11 +596,13 @@
      ],
      "special": {
       "z": "鸡",
-      "c": "46"
-     }
+      "c": "46",
+      "color": ""
+     },
+     "result": ""
     },
     {
-     "issue": 320,
+     "issue": "320",
      "oddEven": "双数",
      "zodiacs": [
       "猴",
@@ -597,18 +611,30 @@
      ],
      "special": {
       "z": "蛇",
-      "c": "38"
-     }
+      "c": "38",
+      "color": ""
+     },
+     "result": ""
     },
     {
-     "issue": 321,
+     "issue": "321",
      "oddEven": "双数",
      "zodiacs": [
       "狗",
       "猴",
       "鼠"
      ],
-     "special": null
+     "special": null,
+     "result": ""
+    },
+    {
+     "issue": "322",
+     "list": [],
+     "special": null,
+     "result": "",
+     "zodiacs": [
+      "羊鸡兔"
+     ]
     }
    ]
   },
