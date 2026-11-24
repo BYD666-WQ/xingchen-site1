@@ -1,6 +1,6 @@
 {
  "name": "彩霸王资料",
- "updated": "2026-11-23T16:58:08.114Z",
+ "updated": "2026-11-24T02:33:23.477Z",
  "sections": [
   {
    "id": "liuxiao",
@@ -992,132 +992,14 @@
    "note": "",
    "rows": [
     {
-     "issue": "313",
-     "heads": [
-      1,
-      2,
-      3
-     ],
-     "special": {
-      "z": "马",
-      "c": "13",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "314",
-     "heads": [
-      2,
-      3,
-      4
-     ],
-     "special": {
-      "z": "鸡",
-      "c": "46",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "315",
-     "heads": [
-      0,
-      1,
-      4
-     ],
-     "special": {
-      "z": "牛",
-      "c": "06",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "316",
-     "heads": [
-      1,
-      2,
-      3
-     ],
-     "special": {
-      "z": "虎",
-      "c": "29",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "317",
-     "heads": [
-      1,
-      2,
-      4
-     ],
-     "special": {
-      "z": "马",
-      "c": "13",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "318",
-     "heads": [
-      1,
-      2,
-      3
-     ],
-     "special": {
-      "z": "龙",
-      "c": "27",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "319",
-     "heads": [
-      1,
-      2,
-      4
-     ],
-     "special": {
-      "z": "鸡",
-      "c": "46",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "320",
-     "heads": [
-      1,
-      2,
-      3
-     ],
-     "special": {
-      "z": "蛇",
-      "c": "38",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "321",
-     "heads": [
-      1,
-      2,
-      4
-     ],
-     "special": null,
-     "result": ""
-    },
-    {
-     "issue": "322",
+     "issue": "327",
      "list": [],
-     "special": null,
-     "result": "",
+     "special": {
+      "z": "羊",
+      "c": "36",
+      "color": ""
+     },
+     "result": "准",
      "heads": [
       0,
       2,
