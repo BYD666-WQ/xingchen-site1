@@ -1,6 +1,6 @@
 {
  "name": "彩霸王资料",
- "updated": "2026-11-24T02:37:59.183Z",
+ "updated": "2026-11-24T02:39:38.328Z",
  "sections": [
   {
    "id": "liuxiao",
@@ -1015,77 +1015,14 @@
    "note": "",
    "rows": [
     {
-     "issue": "315",
-     "tails": "1236789",
-     "special": {
-      "z": "牛",
-      "c": "06",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "316",
-     "tails": "0123478",
-     "special": {
-      "z": "虎",
-      "c": "29",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "317",
-     "tails": "1234789",
-     "special": {
-      "z": "马",
-      "c": "13",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "318",
-     "tails": "0124678",
-     "special": {
-      "z": "龙",
-      "c": "27",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "319",
-     "tails": "0123478",
-     "special": {
-      "z": "鸡",
-      "c": "46",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "320",
-     "tails": "0124568",
-     "special": {
-      "z": "蛇",
-      "c": "38",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "321",
+     "issue": "327",
      "list": [],
-     "special": null,
-     "result": "",
-     "tails": "0354678"
-    },
-    {
-     "issue": "322",
-     "list": [],
-     "special": null,
-     "result": "",
+     "special": {
+      "z": "羊",
+      "c": "36",
+      "color": ""
+     },
+     "result": "准",
      "tails": "0129678"
     }
    ]
