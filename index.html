@@ -474,5 +474,18 @@
 .bottom-nav a{min-height:44px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center}
 @media(prefers-reduced-motion:reduce){.refresh-cell .rf-spin{animation:none}}
 </style>
+<script>(function(){
+  var BASE='https://xingchen-live.xingchen-lottery.workers.dev';
+  var scene=(new URLSearchParams(location.search).get('livetest')==='1')?'test':'prod';
+  var q=scene==='test'?'?scene=test':'';
+  var es=null,timer=null,last='';
+  function refresh(){try{if(window.__xcRefreshData)window.__xcRefreshData();else if(typeof window.load==='function')window.load();else if(window.__xcRefresh)window.__xcRefresh();else location.reload()}catch(e){location.reload()}}
+  function onDraw(ev){try{var d=JSON.parse(ev.data||'{}');if(!d||!d.issue)return;if(last&&String(d.issue)===last)return;last=String(d.issue);refresh()}catch(e){}}
+  function fallback(){if(timer)return;timer=setInterval(function(){fetch(BASE+'/latest'+q,{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){if(d&&d.issue&&(!last||String(d.issue)!==last)){last=String(d.issue);refresh()}}).catch(function(){})},10000)}
+  function connect(){if(document.hidden||es)return;try{es=new EventSource(BASE+'/sse'+q);es.addEventListener('draw',onDraw);es.onerror=function(){try{es.close()}catch(e){}es=null;fallback()}}catch(e){fallback()}}
+  function stop(){if(es){try{es.close()}catch(e){}es=null}if(timer){clearInterval(timer);timer=null}}
+  document.addEventListener('visibilitychange',function(){if(document.hidden)stop();else connect()});
+  connect();setTimeout(connect,1500);
+})();</script>
 </body>
 </html>
