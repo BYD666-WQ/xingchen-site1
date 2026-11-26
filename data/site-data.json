@@ -1,6 +1,6 @@
 {
  "name": "彩霸王资料",
- "updated": "2026-11-26T16:02:20.663Z",
+ "updated": "2026-11-26T16:03:29.940Z",
  "sections": [
   {
    "id": "liuxiao",
@@ -90,7 +90,7 @@
   },
   {
    "id": "jiaye",
-   "title": "家野",
+   "title": "家肖",
    "type": "jiaye",
    "note": "示例",
    "rows": [
@@ -104,7 +104,7 @@
      },
      "result": "",
      "zodiacs": [
-      "家肖+龙兔虎"
+      "龙兔虎"
      ]
     },
     {
