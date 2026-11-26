@@ -206,7 +206,7 @@
     return m;
   }
   function specialVisibleAt(issue){
-    try{var raw=(DATA&&DATA.manualRaw)||{};var cur=raw.current||raw;var bi=parseInt(cur.issue,10)||0;var br=cur.visibleFrom||cur.publishedAt||'';if(!bi||!br)return new Date(0);var b=new Date(br);if(isNaN(b.getTime()))return new Date(0);var at=new Date(b.getTime()+((parseInt(issue,10)||bi)-bi)*86400000);return new Date(at.getTime()+3600000)}catch(e){return new Date(0)}
+    try{var raw=(DATA&&DATA.manualRaw)||{};var cur=raw.current||raw;var h0=(raw.history&&raw.history[0])||(cur.history&&cur.history[0]);var bi=parseInt((h0&&h0.issue)||cur.issue,10)||0;var br=(h0&&h0.visibleFrom)||cur.visibleFrom||cur.publishedAt||'';if(!bi||!br){var ci=parseInt((raw&&raw.issue)||0,10);return (parseInt(issue,10)||0)<ci?new Date(0):new Date(Date.now()+86400000)}var b=new Date(br);if(isNaN(b.getTime())){var ci2=parseInt((raw&&raw.issue)||0,10);return (parseInt(issue,10)||0)<ci2?new Date(0):new Date(Date.now()+86400000)}var at=new Date(b.getTime()+((parseInt(issue,10)||bi)-bi)*86400000);return new Date(at.getTime()+3600000)}catch(e){return new Date(0)}
   }
   function spOf(row){
     if(row&&row.issue!=null&&Date.now()<specialVisibleAt(row.issue).getTime())return null;
