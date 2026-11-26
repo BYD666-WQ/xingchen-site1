@@ -1,6 +1,6 @@
 {
  "name": "彩霸王资料",
- "updated": "2026-11-26T16:10:58.761Z",
+ "updated": "2026-11-26T16:13:22.896Z",
  "sections": [
   {
    "id": "liuxiao",
@@ -152,140 +152,13 @@
    "note": "",
    "rows": [
     {
-     "issue": "313",
-     "oddEven": "双数",
-     "zodiacs": [
-      "马",
-      "龙",
-      "虎"
-     ],
-     "special": {
-      "z": "马",
-      "c": "13",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "314",
-     "oddEven": "单数",
-     "zodiacs": [
-      "鸡",
-      "羊",
-      "牛"
-     ],
-     "special": {
-      "z": "鸡",
-      "c": "46",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "315",
-     "oddEven": "双数",
-     "zodiacs": [
-      "狗",
-      "龙",
-      "兔"
-     ],
-     "special": {
-      "z": "牛",
-      "c": "06",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "316",
-     "oddEven": "双数",
-     "zodiacs": [
-      "猴",
-      "虎",
-      "狗"
-     ],
-     "special": {
-      "z": "虎",
-      "c": "29",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "317",
-     "oddEven": "单数",
-     "zodiacs": [
-      "鸡",
-      "羊",
-      "蛇"
-     ],
-     "special": {
-      "z": "马",
-      "c": "13",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "318",
-     "oddEven": "单数",
-     "zodiacs": [
-      "鸡",
-      "蛇",
-      "羊"
-     ],
+     "issue": "330",
+     "list": [],
      "special": {
       "z": "龙",
-      "c": "27",
+      "c": "03",
       "color": ""
      },
-     "result": ""
-    },
-    {
-     "issue": "319",
-     "oddEven": "单数",
-     "zodiacs": [
-      "鸡",
-      "羊",
-      "蛇"
-     ],
-     "special": {
-      "z": "鸡",
-      "c": "46",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "320",
-     "oddEven": "双数",
-     "zodiacs": [
-      "猴",
-      "虎",
-      "狗"
-     ],
-     "special": {
-      "z": "蛇",
-      "c": "38",
-      "color": ""
-     },
-     "result": ""
-    },
-    {
-     "issue": "321",
-     "oddEven": "双数",
-     "zodiacs": [
-      "狗",
-      "猴",
-      "鼠"
-     ],
-     "special": null,
-     "result": ""
-    },
-    {
-     "issue": "322",
-     "list": [],
-     "special": null,
      "result": "",
      "zodiacs": [
       "羊鸡兔"
