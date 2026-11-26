@@ -1,6 +1,6 @@
 {
  "name": "彩霸王资料",
- "updated": "2026-11-26T16:05:06.482Z",
+ "updated": "2026-11-26T16:07:49.412Z",
  "sections": [
   {
    "id": "liuxiao",
@@ -125,89 +125,23 @@
    "note": "",
    "rows": [
     {
-     "issue": 313,
-     "waves": [
-      "红",
-      "绿"
-     ],
-     "special": {
-      "z": "马",
-      "c": "13"
-     }
-    },
-    {
-     "issue": 314,
-     "waves": [
-      "绿",
-      "红"
-     ],
-     "special": {
-      "z": "鸡",
-      "c": "46"
-     }
-    },
-    {
-     "issue": 315,
-     "waves": [
-      "红",
-      "绿"
-     ],
-     "special": {
-      "z": "牛",
-      "c": "06"
-     }
-    },
-    {
-     "issue": 316,
-     "waves": [
-      "红",
-      "绿"
-     ],
-     "special": {
-      "z": "虎",
-      "c": "29"
-     }
-    },
-    {
-     "issue": 317,
-     "waves": [
-      "红",
-      "绿"
-     ],
-     "special": {
-      "z": "马",
-      "c": "13"
-     }
-    },
-    {
-     "issue": 319,
+     "issue": "330",
      "waves": [
       "蓝",
       "绿"
      ],
-     "special": {
-      "z": "鸡",
-      "c": "46"
-     }
+     "special": null,
+     "result": ""
     },
     {
-     "issue": 320,
+     "issue": "331",
+     "list": [],
+     "special": null,
+     "result": "",
      "waves": [
       "红",
-      "绿"
-     ],
-     "special": {
-      "z": "蛇",
-      "c": "38"
-     }
-    },
-    {
-     "issue": 321,
-     "waves": [
-      "蓝",
-      "绿"
-     ],
-     "special": null
+      "蓝"
+     ]
     }
    ]
   },
