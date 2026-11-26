@@ -1,6 +1,6 @@
 {
  "name": "彩霸王资料",
- "updated": "2026-11-26T15:56:49.384Z",
+ "updated": "2026-11-26T15:58:10.653Z",
  "sections": [
   {
    "id": "liuxiao",
@@ -855,6 +855,32 @@
       "c": "35",
       "color": ""
      },
+     "result": "",
+     "heads": [
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "issue": "330",
+     "list": [],
+     "special": {
+      "z": "龙",
+      "c": "03",
+      "color": ""
+     },
+     "result": "",
+     "heads": [
+      0,
+      1,
+      2
+     ]
+    },
+    {
+     "issue": "331",
+     "list": [],
+     "special": null,
      "result": "",
      "heads": [
       1,
