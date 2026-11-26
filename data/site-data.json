@@ -1,6 +1,6 @@
 {
  "name": "彩霸王资料",
- "updated": "2026-11-26T00:21:04.320Z",
+ "updated": "2026-11-26T12:38:28.451Z",
  "sections": [
   {
    "id": "liuxiao",
@@ -790,6 +790,41 @@
      "result": "准",
      "pair": [
       "猪鼠"
+     ]
+    },
+    {
+     "issue": "328",
+     "list": [],
+     "special": {
+      "z": "猴",
+      "c": "11",
+      "color": ""
+     },
+     "result": "",
+     "pair": [
+      "羊兔"
+     ]
+    },
+    {
+     "issue": "329",
+     "list": [],
+     "special": {
+      "z": "猴",
+      "c": "35",
+      "color": ""
+     },
+     "result": "",
+     "pair": [
+      "鸡蛇"
+     ]
+    },
+    {
+     "issue": "330",
+     "list": [],
+     "special": null,
+     "result": "",
+     "pair": [
+      "马羊"
      ]
     }
    ]
