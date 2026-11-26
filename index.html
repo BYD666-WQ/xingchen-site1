@@ -205,7 +205,11 @@
     var m={};try{(DATA.numAttrs.rows||[]).forEach(function(r){if(r.num&&r.color)m[XC.asNum(r.num)]=r.color})}catch(e){}
     return m;
   }
+  function specialVisibleAt(issue){
+    try{var raw=(DATA&&DATA.manualRaw)||{};var cur=raw.current||raw;var bi=parseInt(cur.issue,10)||0;var br=cur.visibleFrom||cur.publishedAt||'';if(!bi||!br)return new Date(0);var b=new Date(br);if(isNaN(b.getTime()))return new Date(0);var at=new Date(b.getTime()+((parseInt(issue,10)||bi)-bi)*86400000);return new Date(at.getTime()+3600000)}catch(e){return new Date(0)}
+  }
   function spOf(row){
+    if(row&&row.issue!=null&&Date.now()<specialVisibleAt(row.issue).getTime())return null;
     if(row&&row.special&&row.special.z)return {c:XC.asNum(row.special.c),z:row.special.z,color:row.special.color||''};
     return (SPMAP&&SPMAP[XC.short(row&&row.issue)])||null;
   }
