@@ -423,7 +423,7 @@
       else label=(q.zodiac&&q.num)?(q.zodiac+'-'+q.num):'待开';
       var dz=drawZod(p.issue);
       function row(lab,zod,nums,mark){var zh=(zod||[]).map(function(z){return hz(z,dz.indexOf(z)>=0)}).join('');var nh=(nums||[]).map(function(c){return hnum(c,dz.indexOf(XC.asNum(c))>=0)}).join(' ');return '<div class="ten-pkrow"><span class="ten-pl">'+lab+'</span><span class="ten-pz">'+zh+'</span><span class="ten-pl">'+mark+'</span><span class="ten-pn">'+nh+'</span></div>'}
-      return '<div class="ten-pickcard"><div class="ten-blue">彩霸王 预测八肖 真的牛逼</div><div class="ten-ph">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div>'+row('七肖:',p.seven.zodiac,p.seven.nums,'⑦码:')+row('五肖:',p.five.zodiac,p.five.nums,'⑤码:')+row('三肖:',p.three.zodiac,p.three.nums,'③码:')+'</div>';
+      return '<div class="ten-pickcard"><div class="ten-blue">彩霸王 预测七肖 真的牛逼</div><div class="ten-ph">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div>'+row('七肖:',p.seven.zodiac,p.seven.nums,'⑦码:')+row('五肖:',p.five.zodiac,p.five.nums,'⑤码:')+row('三肖:',p.three.zodiac,p.three.nums,'③码:')+'</div>';
     }).join('')||'<div class="new-empty">暂无精选资料</div>';
     out+=tenSection('内幕一肖一码',phtml,'','pick');
     // 8 三头中特
