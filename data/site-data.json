@@ -1,6 +1,6 @@
 {
  "name": "彩霸王资料",
- "updated": "2026-11-26T15:59:42.252Z",
+ "updated": "2026-11-26T16:02:20.663Z",
  "sections": [
   {
    "id": "liuxiao",
@@ -95,96 +95,24 @@
    "note": "示例",
    "rows": [
     {
-     "issue": 314,
-     "category": "家禽",
-     "zodiacs": [
-      "狗",
-      "猪",
-      "鸡"
-     ],
-     "special": {
-      "z": "鸡",
-      "c": "46"
-     }
-    },
-    {
-     "issue": 315,
-     "category": "野兽",
-     "zodiacs": [
-      "猴",
-      "马",
-      "羊"
-     ],
-     "special": {
-      "z": "牛",
-      "c": "06"
-     }
-    },
-    {
-     "issue": 316,
-     "category": "野兽",
-     "zodiacs": [
-      "兔",
-      "羊",
-      "龙"
-     ],
-     "special": {
-      "z": "虎",
-      "c": "29"
-     }
-    },
-    {
-     "issue": 317,
-     "category": "野兽",
-     "zodiacs": [
-      "龙",
-      "猴",
-      "牛"
-     ],
-     "special": {
-      "z": "马",
-      "c": "13"
-     }
-    },
-    {
-     "issue": 318,
-     "category": "野兽",
-     "zodiacs": [
-      "蛇",
-      "马",
-      "龙"
-     ],
+     "issue": "330",
+     "list": [],
      "special": {
       "z": "龙",
-      "c": "27"
-     }
+      "c": "03",
+      "color": ""
+     },
+     "result": "",
+     "zodiacs": [
+      "家肖+龙兔虎"
+     ]
     },
     {
-     "issue": 319,
-     "category": "家禽",
-     "zodiacs": [
-      "羊",
-      "兔",
-      "鼠"
-     ],
-     "special": {
-      "z": "鸡",
-      "c": "46"
-     }
-    },
-    {
-     "issue": 320,
-     "category": "野兽",
-     "zodiacs": [
-      "猴",
-      "羊",
-      "鼠"
-     ],
-     "special": {
-      "z": "蛇",
-      "c": "38",
-      "color": "绿"
-     }
+     "issue": "",
+     "list": [],
+     "special": null,
+     "result": "",
+     "zodiacs": []
     }
    ]
   },
