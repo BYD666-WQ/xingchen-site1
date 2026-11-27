@@ -426,6 +426,15 @@
       return '<div class="ten-pickcard"><div class="ten-blue">彩霸王 预测七肖 真的牛逼</div><div class="ten-ph">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div>'+row('七肖:',(p.seven&&p.seven.zodiac)||[],(p.seven&&p.seven.nums)||[],'⑦码:')+row('五肖:',(p.five&&p.five.zodiac)||[],(p.five&&p.five.nums)||[],'⑤码:')+row('三肖:',(p.three&&p.three.zodiac)||[],(p.three&&p.three.nums)||[],'③码:')+'</div>';
     }).join('')||'<div class="new-empty">暂无精选资料</div>';
     out+=tenSection('内幕一肖一码',phtml,'','pick');
+    // 7.5 玄机诗象 + 内幕资料（首页截断）
+    var _po=(DATA.poems&&DATA.poems.rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)});
+    var poHtml=_po[0]?'<div class="ten-poem"><span class="ten-poem-iss">'+esc(XC.short(_po[0].issue))+'期</span><p>'+esc(_po[0].poem||'')+'</p><a class="ten-poem-more" href="data.html#poems">查看全部 ›</a></div>':'<div class="new-empty">暂无玄机诗象</div>';
+    out+=tenSection('玄机诗象',poHtml,'','poems');
+    var _zl=(DATA.ziliao&&DATA.ziliao.rows||[]).slice().sort(function(a,b){return (parseInt(b.issue,10)||0)-(parseInt(a.issue,10)||0)}).slice(0,3);
+    var zlHtml=_zl.map(function(r){var t=String(r.text||'内幕资料');var sum=[r.oddEven?'单双 '+r.oddEven:'',(r.threeZodiac||[]).length?'三肖 '+r.threeZodiac.join(''):'',r.result&&r.result.z?'开 '+r.result.z+r.result.c:''].filter(Boolean).join(' · ')||'内幕资料 · 每日更新';return '<div class="ten-zl-row"><b>'+esc(XC.short(r.issue))+'期</b><div><span class="ten-zl-t">'+esc(t)+'</span><span class="ten-zl-s">'+esc(sum)+'</span></div></div>'}).join('')||'<div class="new-empty">暂无内幕资料</div>';
+    if(_zl.length)zlHtml+='<a class="ten-zl-more" href="data.html#ziliao">查看全部 ›</a>';
+    out+=tenSection('内幕资料',zlHtml,'','ziliao');
+
     // 8 三头中特
     var st=ascRows((BDL.santou||{}).rows||[]).slice(-8);
     var stH=st.map(function(r){var sp=spOf(r),hs=r.heads||[],hh=hs.map(function(h,i){var on=!!(sp&&Math.floor(parseInt(sp.c,10)/10)===h);return '<span class="ten-head '+(i%2?'g':'r')+(on?' ten-hit':'')+'">'+h+'头</span>'}).join('');return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">三头中特 <span class="ten-hi">【'+hh+'】</span></span><span class="ten-res">'+(sp?('開:'+esc(sp.z)+'<span class="wave-'+waveClass(sp.c)+'">+'+esc(sp.c)+'</span>'):'開:? <b class="ten-wait">待</b>')+'</span></div>'}).join('');
@@ -475,6 +484,17 @@
 .channels .ch{min-height:44px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .bottom-nav a{min-height:44px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center}
 @media(prefers-reduced-motion:reduce){.refresh-cell .rf-spin{animation:none}}
+</style>
+<style id="ten-home-extra">
+.ten-poem{padding:12px 14px;text-align:center;background:#fffdf6;border-top:1px dashed #e8c98a;color:#7a1010}
+.ten-poem-iss{display:inline-block;font-size:11px;font-weight:800;color:#fff;background:#C00012;border-radius:4px;padding:1px 6px;margin-bottom:6px}
+.ten-poem p{margin:0;font-size:15px;line-height:1.7;font-weight:700}
+.ten-poem-more,.ten-zl-more{display:block;text-align:right;padding:8px 12px;font-size:12px;color:#C00012;text-decoration:none;font-weight:800}
+.ten-zl-row{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-top:1px dashed #e8c98a;min-width:0}
+.ten-zl-row b{flex:0 0 auto;color:#C00012;font-size:13px}
+.ten-zl-row>div{min-width:0;flex:1 1 auto}
+.ten-zl-t{display:block;font-size:14px;font-weight:800;color:#222;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ten-zl-s{display:block;margin-top:3px;font-size:12px;color:#777;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
 <script src="assets/appwrite.js"></script>
 <script>(function(){
