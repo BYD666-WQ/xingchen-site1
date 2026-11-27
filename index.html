@@ -318,14 +318,14 @@
       var sp=spOf(p),dz=drawZod(p.issue),q=p.pick||{};
       var label='待开';
       if(sp){
-        if((p.three.zodiac||[]).indexOf(sp.z)>=0)label='中三肖';
-        else if((p.five.zodiac||[]).indexOf(sp.z)>=0)label='中五肖';
-        else if((p.seven.zodiac||[]).indexOf(sp.z)>=0)label='中七肖';
+        if(((p.three&&p.three.zodiac)||[]).indexOf(sp.z)>=0)label='中三肖';
+        else if(((p.five&&p.five.zodiac)||[]).indexOf(sp.z)>=0)label='中五肖';
+        else if(((p.seven&&p.seven.zodiac)||[]).indexOf(sp.z)>=0)label='中七肖';
         else if(q.zodiac===sp.z&&XC.asNum(q.num)===sp.c)label=q.zodiac+'-'+q.num;
         else label='未中';
       }
       function zRow(name,zod,nums,marker){var zs=(zod||[]).map(function(z){return dz.indexOf(z)>=0?'<span class="hit">'+esc(z)+'</span>':esc(z)}).join('');return '<div class="pk-row"><span class="pk-l">'+name+'</span><span class="pk-z">'+zs+'</span><span class="pk-l">'+marker+'</span><span class="pk-n">'+(nums||[]).join(' ')+'</span></div>'}
-      var body=p._pending?'<div class="pk-pending">本期资料待开</div>':(zRow('七肖:',p.seven.zodiac,p.seven.nums,'⑦码:')+zRow('五肖:',p.five.zodiac,p.five.nums,'⑤码:')+zRow('三肖:',p.three.zodiac,p.three.nums,'③码:'));
+      var body=p._pending?'<div class="pk-pending">本期资料待开</div>':(zRow('七肖:',(p.seven&&p.seven.zodiac)||[],(p.seven&&p.seven.nums)||[],'⑦码:')+zRow('五肖:',(p.five&&p.five.zodiac)||[],(p.five&&p.five.nums)||[],'⑤码:')+zRow('三肖:',(p.three&&p.three.zodiac)||[],(p.three&&p.three.nums)||[],'③码:'));
       return '<div class="pick-card"><div class="pick-head">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div><div class="pick-wm">资料展示 · 占位水印</div><div class="pick-body">'+body+'</div></div>';
     }).join('')||'<div class="new-empty">暂无精选资料</div>';
     out+='<section class="new-block"><div class="new-hd">一肖一码 <span>精选 · 按实际开奖对照</span></div>'+pickHtml+'</section>';
@@ -399,7 +399,7 @@
     }).join('')||'<div class="new-empty">暂无六肖资料</div>';
     out+=tenSection('六肖精选',six,'','liuxiao');
     // 2 家野
-    var jyBase=secRows('jiaye');var jy=(jyBase.length?jyBase.slice(-7):lx.map(function(r){var p=pickOf(r.issue),zs=(p&&p.three&&p.three.zodiac||[]).slice(0,3);if(zs.length<3)zs=zs.concat((r.list||[]).slice(0,3).map(function(x){return x.z}));if(zs.length<3)zs=zs.concat(ZODIAC);return {issue:r.issue,category:(HOME.indexOf(zs[0])>=0?'家禽':'野兽'),zodiacs:zs.slice(0,3),special:spOf(r)}})).map(function(r){var sp=spOf(r);if(!sp&&r.special)sp=r.special;var zs=r.zodiacs||[];var cat=r.category||(HOME.indexOf(zs[0])>=0?'家禽':'野兽');var hit=!!(sp&&(((cat==='家禽'?HOME:WILD).indexOf(sp.z)>=0)||zs.indexOf(sp.z)>=0));var zhtml=zs.map(function(z){return hz(z,!!(sp&&z===sp.z))}).join('');return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">家野 <span class="ten-hi">【'+cat+'+'+zhtml+'】</span></span><span class="ten-res">'+tr(sp,hit,'准')+'</span></div>'}).join('')||'<div class="new-empty">暂无家野资料</div>';
+    var jyBase=secRows('jiaye');var jy=(jyBase.length?jyBase.slice(-7):lx.map(function(r){var p=pickOf(r.issue),zs=(p&&p.three&&(p.three&&p.three.zodiac)||[]).slice(0,3);if(zs.length<3)zs=zs.concat((r.list||[]).slice(0,3).map(function(x){return x.z}));if(zs.length<3)zs=zs.concat(ZODIAC);return {issue:r.issue,category:(HOME.indexOf(zs[0])>=0?'家禽':'野兽'),zodiacs:zs.slice(0,3),special:spOf(r)}})).map(function(r){var sp=spOf(r);if(!sp&&r.special)sp=r.special;var zs=r.zodiacs||[];var cat=r.category||(HOME.indexOf(zs[0])>=0?'家禽':'野兽');var hit=!!(sp&&(((cat==='家禽'?HOME:WILD).indexOf(sp.z)>=0)||zs.indexOf(sp.z)>=0));var zhtml=zs.map(function(z){return hz(z,!!(sp&&z===sp.z))}).join('');return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">家野 <span class="ten-hi">【'+cat+'+'+zhtml+'】</span></span><span class="ten-res">'+tr(sp,hit,'准')+'</span></div>'}).join('')||'<div class="new-empty">暂无家野资料</div>';
     out+=tenSection('家野',jy+'<div class="ten-note">家禽：牛.马.羊.鸡.狗.猪　野兽：鼠.虎.兔.龙.蛇.猴</div>','示例','jiaye');
     // 3 必赢双波
     var sb=ascRows((BDL.shuangbo||{}).rows||[]).slice(-8);
@@ -410,7 +410,7 @@
     var dsH=ds.map(function(r){var sp=spOf(r),odd=sp?(parseInt(sp.c,10)%2===1):false,hit=!!(sp&&(((r.oddEven==='单数')===odd)||(r.zodiacs||[]).indexOf(sp.z)>=0));var zs=(r.zodiacs||[]).map(function(z){return hz(z,!!(sp&&z===sp.z))}).join('');return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">单双 <span class="ten-hi">【'+esc(r.oddEven||'')+'+'+zs+'】</span></span><span class="ten-res">'+tr(sp,hit,'中')+'</span></div>'}).join('');
     out+=tenSection('单双',dsH||'<div class="new-empty">暂无单双资料</div>','','danshuang');
     // 5 跑狗九肖
-    var jxBase=secRows('jiuxiao');var jx=(jxBase.length?jxBase.slice(-7):lx.map(function(r){var zs=(r.list||[]).map(function(x){return x.z}),p=pickOf(r.issue);if(p&&p.three)zs=zs.concat(p.three.zodiac||[]);return {issue:r.issue,zodiacs:zs.concat(ZODIAC).filter(function(z,i,a){return a.indexOf(z)===i}).slice(0,9),special:spOf(r)}})).map(function(r){var sp=spOf(r);if(!sp&&r.special)sp=r.special;var zs=r.zodiacs||[];var hit=!!(sp&&zs.indexOf(sp.z)>=0);var zh=zs.map(function(z){return hz(z,!!(sp&&z===sp.z))}).join('');return '<div class="ten-nine"><div class="ten-l1">'+esc(XC.short(r.issue))+'期：『跑狗九肖』特开：'+tr(sp,hit,'准').replace(/^开:/,'')+'</div><div class="ten-l2">❀【'+zh+'】❀</div></div>'}).join('')||'<div class="new-empty">暂无九肖资料</div>';
+    var jxBase=secRows('jiuxiao');var jx=(jxBase.length?jxBase.slice(-7):lx.map(function(r){var zs=(r.list||[]).map(function(x){return x.z}),p=pickOf(r.issue);if(p&&p.three)zs=zs.concat((p.three&&p.three.zodiac)||[]);return {issue:r.issue,zodiacs:zs.concat(ZODIAC).filter(function(z,i,a){return a.indexOf(z)===i}).slice(0,9),special:spOf(r)}})).map(function(r){var sp=spOf(r);if(!sp&&r.special)sp=r.special;var zs=r.zodiacs||[];var hit=!!(sp&&zs.indexOf(sp.z)>=0);var zh=zs.map(function(z){return hz(z,!!(sp&&z===sp.z))}).join('');return '<div class="ten-nine"><div class="ten-l1">'+esc(XC.short(r.issue))+'期：『跑狗九肖』特开：'+tr(sp,hit,'准').replace(/^开:/,'')+'</div><div class="ten-l2">❀【'+zh+'】❀</div></div>'}).join('')||'<div class="new-empty">暂无九肖资料</div>';
     out+=tenSection('跑狗九肖',jx||'<div class="new-empty">暂无九肖资料</div>','示例','jiuxiao');
     // 6 必杀二肖
     var erBase=secRows('ersha');var es=(erBase.length?erBase:lx.map(function(r){var p=pickOf(r.issue);return {issue:r.issue,pair:((p&&p.three&&p.three.zodiac)||(r.list||[]).map(function(x){return x.z})).slice(0,2),special:spOf(r)}})).slice(-8).map(function(r){var sp=spOf(r);if(!sp&&r.special)sp=r.special;var pair=r.pair||[];var hit=!!(sp&&pair.indexOf(sp.z)<0);return '<div class="ten-row"><span class="ten-iss">'+esc(XC.short(r.issue))+'期</span><span class="ten-mid">必杀二肖 <span class="ten-hi">【'+pair.map(function(z){return hz(z,false)}).join('')+'】</span></span><span class="ten-res">'+tr(sp,hit,'中')+'</span></div>'}).join('');
@@ -419,11 +419,11 @@
     var picks=ascRows((DATA.pick&&DATA.pick.rows)||[]).slice(-4);
     var phtml=picks.map(function(p){
       var sp=spOf(p),q=p.pick||{},label='待开';
-      if(sp){if((p.three.zodiac||[]).indexOf(sp.z)>=0)label='中三肖';else if((p.five.zodiac||[]).indexOf(sp.z)>=0)label='中五肖';else if((p.seven.zodiac||[]).indexOf(sp.z)>=0)label='中七肖';else label='未中'}
+      if(sp){if(((p.three&&p.three.zodiac)||[]).indexOf(sp.z)>=0)label='中三肖';else if(((p.five&&p.five.zodiac)||[]).indexOf(sp.z)>=0)label='中五肖';else if(((p.seven&&p.seven.zodiac)||[]).indexOf(sp.z)>=0)label='中七肖';else label='未中'}
       else label=(q.zodiac&&q.num)?(q.zodiac+'-'+q.num):'待开';
       var dz=drawZod(p.issue);
       function row(lab,zod,nums,mark){var zh=(zod||[]).map(function(z){return hz(z,dz.indexOf(z)>=0)}).join('');var nh=(nums||[]).map(function(c){return hnum(c,dz.indexOf(XC.asNum(c))>=0)}).join(' ');return '<div class="ten-pkrow"><span class="ten-pl">'+lab+'</span><span class="ten-pz">'+zh+'</span><span class="ten-pl">'+mark+'</span><span class="ten-pn">'+nh+'</span></div>'}
-      return '<div class="ten-pickcard"><div class="ten-blue">彩霸王 预测七肖 真的牛逼</div><div class="ten-ph">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div>'+row('七肖:',p.seven.zodiac,p.seven.nums,'⑦码:')+row('五肖:',p.five.zodiac,p.five.nums,'⑤码:')+row('三肖:',p.three.zodiac,p.three.nums,'③码:')+'</div>';
+      return '<div class="ten-pickcard"><div class="ten-blue">彩霸王 预测七肖 真的牛逼</div><div class="ten-ph">'+esc(p.issue)+'期:内幕一肖一码【<b>'+esc(label)+'</b>】重磅来袭</div>'+row('七肖:',(p.seven&&p.seven.zodiac)||[],(p.seven&&p.seven.nums)||[],'⑦码:')+row('五肖:',(p.five&&p.five.zodiac)||[],(p.five&&p.five.nums)||[],'⑤码:')+row('三肖:',(p.three&&p.three.zodiac)||[],(p.three&&p.three.nums)||[],'③码:')+'</div>';
     }).join('')||'<div class="new-empty">暂无精选资料</div>';
     out+=tenSection('内幕一肖一码',phtml,'','pick');
     // 8 三头中特
