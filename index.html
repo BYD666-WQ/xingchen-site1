@@ -337,7 +337,7 @@
   function renderMoreBlocks(){
     var el=document.getElementById('moreData');if(!el)return;
     if(!DATA){el.innerHTML='<div class="new-empty">更多资料读取中…</div>';return}
-    if(CUR!=='newhk'){el.innerHTML='<div class="new-empty">暂无该彩种更多资料（当前已接入新港）</div>';return}
+    if(CUR!=='newhk'){el.style.display='none';el.innerHTML='';return}el.style.display='';
     if(!BDL){el.innerHTML='<div class="new-empty">更多资料读取中…</div>';return}
     var out='';
     // 1 彩霸王内幕五肖五码（真实 wuxiao）
@@ -388,7 +388,7 @@
   function renderTenBlocks(){
     var el=document.getElementById('tenBlocks');if(!el)return;
     if(!DATA){el.innerHTML='<div class="new-empty">资料读取中…</div>';return}
-    if(CUR!=='newhk'){el.innerHTML='<div class="new-empty">暂无该彩种资料（当前已接入新港）</div>';return}
+    if(CUR!=='newhk'){el.style.display='none';el.innerHTML='';return}el.style.display='';
     if(!BDL){el.innerHTML='<div class="new-empty">资料读取中…</div>';return}
     var out='';
     // 1 六肖精选
